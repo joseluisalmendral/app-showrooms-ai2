@@ -168,3 +168,76 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
 .badge-secondary {
   @apply bg-brand-celeste-100 text-brand-celeste-800;
 }
+
+/* Estilos adicionales para optimizar las animaciones y efectos */
+
+/* Activar GPU para animaciones más fluidas */
+.transform-gpu {
+  transform: translateZ(0);
+}
+
+/* Transiciones más suaves */
+.transition-smooth {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Clase para quitar el borde de focus (para el toggler de HowItWorks) */
+.focus-off:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Estilos para fondos con gradientes */
+.bg-gradient-soft {
+  @apply bg-gradient-to-b from-brand-neutral-50 to-white;
+}
+
+.bg-gradient-mauve {
+  @apply bg-gradient-to-b from-brand-mauve-50 to-white;
+}
+
+.bg-gradient-celeste {
+  @apply bg-gradient-to-b from-brand-celeste-50 to-white;
+}
+
+/* Efecto de paralaje más suave */
+.parallax-slow {
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0.1, 1);
+}
+
+/* Mejoras para tarjetas con efectos de hover */
+.hover-card {
+  @apply transition-all duration-300 hover:shadow-lg;
+  transform: perspective(1000px) rotateX(0) rotateY(0);
+  will-change: transform;
+}
+
+.hover-card:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(0deg) translateY(-5px);
+}
+
+/* Para evitar que el contenido del sitio sufra jank durante el scroll */
+body {
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+/* Para asegurar una mejor experiencia con el cambio de fuentes */
+html, body, h1, h2, h3, h4, h5, h6, p, a, button, input, select, textarea {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Facilita la animación suave de alturas */
+.transition-height {
+  transition-property: height, max-height;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Variaciones de velocidad para carruseles */
+.carousel-transition-fast {
+  transition-duration: 0.3s; /* Para carruseles más rápidos */
+}

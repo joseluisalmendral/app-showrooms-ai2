@@ -40,6 +40,7 @@ const Hero = () => {
   // Referencias para el autocompletado
   const autocompleteRef = useRef(null);
   const inputRef = useRef(null);
+  const [scrollY, setScrollY] = useState(0);
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
@@ -52,6 +53,18 @@ const Hero = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -128,14 +141,17 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden">
+    <section className="relative min-h-[calc(100vh-5rem)] flex items-center py-10 overflow-hidden">
       {/* Contenedor de background con imagen/video */}
       <div className="absolute inset-0 z-0">
         {/* Overlay con opacidad equilibrada y gradiente moderno */}
         <div className="absolute inset-0 bg-gradient-to-r from-brand-neutral-950/70 via-brand-neutral-900/60 to-brand-mauve-900/60 z-10"></div>
         
-        {/* Imagen de fondo estática (visible hasta que el video cargue) */}
-        <div className={`absolute inset-0 transition-opacity duration-1000 ${videoLoaded ? 'opacity-0' : 'opacity-100'}`}>
+        {/* Imagen de fondo estática (visible hasta que el video cargue) con efecto parallax */}
+        <div 
+          className={`absolute inset-0 transition-opacity duration-1000 ${videoLoaded ? 'opacity-0' : 'opacity-100'}`}
+          style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+        >
           <Image
             src="/images/hero-background.jpg"
             alt="Showroom elegante con marcas exhibiendo"
@@ -146,18 +162,23 @@ const Hero = () => {
           />
         </div>
         
-        {/* Video de fondo */}
-        <video 
-          ref={videoRef}
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          preload="auto"
-          className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        {/* Video de fondo con efecto parallax */}
+        <div 
+          className={`absolute w-full h-full overflow-hidden transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+          style={{ transform: `translateY(${scrollY * 0.15}px)` }}
         >
-          <source src="/videos/hero_video.mp4" type="video/mp4" />
-        </video>
+          <video 
+            ref={videoRef}
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            preload="auto"
+            className="absolute w-full h-full object-cover scale-110"
+          >
+            <source src="/videos/hero_video.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">

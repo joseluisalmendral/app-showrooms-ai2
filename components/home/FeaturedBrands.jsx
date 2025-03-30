@@ -84,6 +84,7 @@ const FeaturedBrands = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [brandsPerPage, setBrandsPerPage] = useState(4);
   const [animation, setAnimation] = useState(true);
+  const [scrollY, setScrollY] = useState(0);
   
   const carouselRef = useRef(null);
 
@@ -94,6 +95,23 @@ const FeaturedBrands = () => {
 
   // Determinar el número de páginas del carrusel
   const totalPages = Math.ceil(filteredBrands.length / brandsPerPage);
+
+  // Parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (carouselRef.current) {
+        const rect = carouselRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setScrollY(window.scrollY * 0.05);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Ajustar el número de marcas por página según el tamaño de la pantalla
   useEffect(() => {
@@ -141,14 +159,14 @@ const FeaturedBrands = () => {
     setCurrentPage(0);
   }, [activeCategory]);
 
-  // Autoplay
+  // Autoplay - tiempo reducido a 3 segundos para mayor rapidez
   useEffect(() => {
     let intervalId;
 
     if (!isPaused && !isHovering && !hasInteracted && totalPages > 1) {
       intervalId = setInterval(() => {
         nextPage();
-      }, 6000); // Cambiar cada 6 segundos
+      }, 3000); // Cambiar cada 3 segundos (antes era 6 segundos)
     }
 
     return () => {
@@ -156,14 +174,14 @@ const FeaturedBrands = () => {
     };
   }, [isPaused, isHovering, hasInteracted, nextPage, totalPages]);
 
-  // Reset hasInteracted después de un tiempo de inactividad
+  // Reset hasInteracted después de un tiempo de inactividad - reducido a 6 segundos
   useEffect(() => {
     let timeoutId;
     
     if (hasInteracted) {
       timeoutId = setTimeout(() => {
         setHasInteracted(false);
-      }, 8000); // Vuelve a autoplay después de 8 segundos de inactividad
+      }, 6000); // Vuelve a autoplay después de 6 segundos (antes 8 segundos)
     }
     
     return () => {
@@ -178,8 +196,17 @@ const FeaturedBrands = () => {
   );
 
   return (
-    <section className="py-20 bg-neutral-50">
-      <div className="container mx-auto px-4">
+    <section className="py-20 relative bg-gradient-to-b from-brand-mauve-50 to-white" ref={carouselRef}>
+      {/* Elementos de parallax background */}
+      <div 
+        className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none z-0"
+        style={{ transform: `translateY(${scrollY}px)` }}
+      >
+        <div className="absolute -top-20 right-20 w-80 h-80 rounded-full bg-brand-mauve-300 filter blur-3xl"></div>
+        <div className="absolute bottom-20 -left-20 w-80 h-80 rounded-full bg-brand-celeste-300 filter blur-3xl"></div>
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900">
             Marcas que confían en nosotros
@@ -301,7 +328,6 @@ const FeaturedBrands = () => {
           className="relative overflow-hidden"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
-          ref={carouselRef}
         >
           {filteredBrands.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg border border-neutral-200">
@@ -324,7 +350,7 @@ const FeaturedBrands = () => {
           ) : (
             <>
               <div 
-                className={`flex transition-transform duration-500 ease-in-out ${animation ? '' : 'transition-none'}`}
+                className={`flex transition-transform duration-300 ease-in-out ${animation ? '' : 'transition-none'}`}
                 style={{ transform: `translateX(-${currentPage * 100}%)` }}
                 role="region"
                 aria-roledescription="carousel"

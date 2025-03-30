@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -50,9 +51,41 @@ const SUCCESS_STORIES = [
 ];
 
 const SuccessStories = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const sectionRef = useRef(null);
+
+  // Parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setScrollY(window.scrollY * 0.05);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <section className="py-20 bg-brand-neutral-50">
-      <div className="container mx-auto px-4">
+    <section className="py-20 relative bg-gradient-to-b from-white to-brand-celeste-50" ref={sectionRef}>
+      {/* Elementos decorativos con parallax */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-brand-mauve-200 opacity-20 blur-3xl"
+          style={{ transform: `translateY(${scrollY * 1.2}px)` }}
+        ></div>
+        <div 
+          className="absolute -bottom-40 -left-20 w-96 h-96 rounded-full bg-brand-celeste-200 opacity-20 blur-3xl"
+          style={{ transform: `translateY(${-scrollY * 0.8}px)` }}
+        ></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-6 text-center">
           Historias de éxito
         </h2>
@@ -64,7 +97,7 @@ const SuccessStories = () => {
           {SUCCESS_STORIES.map((story) => (
             <div
               key={story.id}
-              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group"
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group hover:transform hover:scale-105 duration-300"
             >
               <div className="p-6">
                 <div className="flex items-start mb-6 gap-4">
@@ -83,7 +116,7 @@ const SuccessStories = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={1}
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zm-4-7a7 7 0 00-7 7h14a7 7 0 00-7-7zm-7 9h14v2a7 7 0 01-7 7 7 7 0 01-7-7v-2z"
                           />
                         ) : (
                           <path

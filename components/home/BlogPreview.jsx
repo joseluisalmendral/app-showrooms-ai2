@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -47,9 +48,48 @@ const CATEGORY_COLORS = {
 };
 
 const BlogPreview = () => {
+  const sectionRef = useRef(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  // Parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setScrollY(window.scrollY * 0.03);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section className="py-20 relative" ref={sectionRef}>
+      {/* Fondo con gradiente y efectos */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white to-brand-mauve-50"></div>
+
+      {/* Elementos decorativos con parallax */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute top-40 -right-20 w-80 h-80 rounded-full bg-brand-mauve-200 opacity-30 blur-3xl"
+          style={{ transform: `translateY(${scrollY * 1.5}px)` }}
+        ></div>
+        <div 
+          className="absolute -bottom-40 left-1/4 w-96 h-96 rounded-full bg-brand-celeste-200 opacity-20 blur-3xl"
+          style={{ transform: `translateY(${-scrollY * 0.8}px)` }}
+        ></div>
+        <div 
+          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-yellow-200 opacity-10 blur-xl"
+          style={{ transform: `translateY(${scrollY * 1.2}px) translateX(${scrollY * 0.5}px)` }}
+        ></div>
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-4 text-center">
           Tendencias y novedades
         </h2>
@@ -58,10 +98,18 @@ const BlogPreview = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {BLOG_POSTS.map((post) => (
-            <article key={post.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group">
+          {BLOG_POSTS.map((post, index) => (
+            <article 
+              key={post.id} 
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group transform hover:translate-y-[-8px] duration-300"
+              style={{ 
+                transitionDelay: `${index * 100}ms`,
+                opacity: 0,
+                animation: `fadeIn 0.5s ease-out ${index * 0.2}s forwards`
+              }}
+            >
               <Link href={`/blog/${post.slug}`} className="block">
-                <div className="relative h-48 w-full">
+                <div className="relative h-48 w-full overflow-hidden">
                   {/* Placeholder para la imagen */}
                   <div className="absolute inset-0 bg-brand-neutral-200 flex items-center justify-center group-hover:opacity-90 transition-opacity">
                     <svg
@@ -146,12 +194,26 @@ const BlogPreview = () => {
         <div className="mt-10 text-center">
           <Link
             href="/blog"
-            className="btn btn-outline py-2 px-6 hover:bg-brand-mauve-50"
+            className="btn btn-outline py-2 px-6 hover:bg-brand-mauve-50 transform transition-transform hover:scale-105 duration-300"
           >
             Visitar el blog
           </Link>
         </div>
       </div>
+
+      {/* CSS para la animación de aparición de las tarjetas */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { 
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </section>
   );
 };

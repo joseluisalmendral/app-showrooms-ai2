@@ -7,7 +7,7 @@ const HowItWorks = () => {
   const [activeTab, setActiveTab] = useState("marcas"); // "marcas" o "showrooms"
 
   return (
-    <section className="py-20 bg-brand-neutral-50" id="como-funciona">
+    <section className="py-20 bg-brand-mauve-50" id="como-funciona">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-6">
@@ -18,7 +18,7 @@ const HowItWorks = () => {
             posible, tanto para marcas como para propietarios de showrooms.
           </p>
 
-          {/* Selector de tabs mejorado con la nueva paleta */}
+          {/* Selector de tabs mejorado con la nueva paleta y sin borde de focus */}
           <div className="mt-10 inline-flex mx-auto relative max-w-md">
             {/* Fondo decorativo del selector */}
             <div className="absolute inset-0 bg-brand-mauve-100 rounded-lg"></div>
@@ -30,15 +30,16 @@ const HowItWorks = () => {
               }`}
             ></div>
             
-            {/* Botones del selector */}
+            {/* Botones del selector sin ningún focus visible */}
             <div className="relative flex w-full">
               <button
-                className={`flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
+                className={`focus:outline-none flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
                   activeTab === "marcas"
                     ? "text-white"
                     : "text-brand-neutral-700 hover:text-brand-mauve-700"
                 }`}
                 onClick={() => setActiveTab("marcas")}
+                style={{ outline: 'none' }}
               >
                 <span className="flex items-center justify-center">
                   <svg 
@@ -54,12 +55,13 @@ const HowItWorks = () => {
                 </span>
               </button>
               <button
-                className={`flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
+                className={`focus:outline-none flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
                   activeTab === "showrooms"
                     ? "text-white"
                     : "text-brand-neutral-700 hover:text-brand-mauve-700"
                 }`}
                 onClick={() => setActiveTab("showrooms")}
+                style={{ outline: 'none' }}
               >
                 <span className="flex items-center justify-center">
                   <svg 
