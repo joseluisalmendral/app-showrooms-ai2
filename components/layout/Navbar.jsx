@@ -25,13 +25,13 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="block">
               <div className="h-14 flex items-center">
-                <Image 
+                {/* <Image 
                   src="/images/logo.png" 
                   alt="The Showroom App" 
                   width={56} 
                   height={56} 
                   className="mr-3"
-                />
+                /> */}
                 <span className="font-handwritten text-3xl font-bold text-brand-mauve-700">The Showroom App</span>
               </div>
             </Link>
