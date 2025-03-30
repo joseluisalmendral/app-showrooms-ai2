@@ -47,7 +47,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="flex flex-col min-h-screen antialiased bg-brand-beige-200">
+      <body className="flex flex-col min-h-screen antialiased bg-brand-neutral-50">
         <Navbar />
         <main className="flex-grow">
           {children}

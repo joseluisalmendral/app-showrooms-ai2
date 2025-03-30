@@ -7,25 +7,25 @@ const HowItWorks = () => {
   const [activeTab, setActiveTab] = useState("marcas"); // "marcas" o "showrooms"
 
   return (
-    <section className="py-20 bg-neutral-50" id="como-funciona">
+    <section className="py-20 bg-brand-neutral-50" id="como-funciona">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-6">
             Tres pasos sencillos
           </h2>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-lg text-brand-neutral-600 max-w-2xl mx-auto">
             Nuestra plataforma está diseñada para hacer el proceso lo más simple
             posible, tanto para marcas como para propietarios de showrooms.
           </p>
 
-          {/* Selector de tabs mejorado */}
+          {/* Selector de tabs mejorado con la nueva paleta */}
           <div className="mt-10 inline-flex mx-auto relative max-w-md">
             {/* Fondo decorativo del selector */}
-            <div className="absolute inset-0 bg-brand-teal-100 rounded-lg"></div>
+            <div className="absolute inset-0 bg-brand-mauve-100 rounded-lg"></div>
             
             {/* Indicador que se desplaza según la selección */}
             <div 
-              className={`absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-brand-teal-600 to-brand-teal-700 rounded-lg shadow-md transition-all duration-300 transform ${
+              className={`absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-brand-mauve-400 to-brand-mauve-500 rounded-lg shadow-md transition-all duration-300 transform ${
                 activeTab === "marcas" ? "translate-x-0" : "translate-x-full"
               }`}
             ></div>
@@ -36,7 +36,7 @@ const HowItWorks = () => {
                 className={`flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
                   activeTab === "marcas"
                     ? "text-white"
-                    : "text-neutral-700 hover:text-brand-teal-700"
+                    : "text-brand-neutral-700 hover:text-brand-mauve-700"
                 }`}
                 onClick={() => setActiveTab("marcas")}
               >
@@ -57,7 +57,7 @@ const HowItWorks = () => {
                 className={`flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
                   activeTab === "showrooms"
                     ? "text-white"
-                    : "text-neutral-700 hover:text-brand-teal-700"
+                    : "text-brand-neutral-700 hover:text-brand-mauve-700"
                 }`}
                 onClick={() => setActiveTab("showrooms")}
               >
@@ -77,14 +77,14 @@ const HowItWorks = () => {
           </div>
         </div>
 
-        {/* Pasos para Marcas */}
+        {/* Pasos para Marcas con nuevos estilos */}
         <div
           className={`grid grid-cols-1 md:grid-cols-3 gap-8 ${
             activeTab === "marcas" ? "block animate-fade-in" : "hidden"
           }`}
         >
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
-            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all border border-brand-neutral-200 hover:border-brand-mauve-300">
+            <div className="w-14 h-14 bg-brand-mauve-100 text-brand-mauve-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -98,14 +98,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 1</h3>
-            <p className="text-neutral-700 mb-4">
+            <h3 className="text-2xl font-semibold mb-3 text-brand-neutral-900">Paso 1</h3>
+            <p className="text-brand-neutral-700 mb-4">
               Explora y filtra showrooms según tus necesidades específicas de
               ubicación, tamaño, estilo y presupuesto.
             </p>
             <Link
               href="/showrooms"
-              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
+              className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium flex items-center"
             >
               Ver showrooms disponibles
               <svg
@@ -123,8 +123,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
-            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all border border-brand-neutral-200 hover:border-brand-mauve-300">
+            <div className="w-14 h-14 bg-brand-mauve-100 text-brand-mauve-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -135,14 +135,14 @@ const HowItWorks = () => {
                 <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
               </svg>
             </div>
-            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 2</h3>
-            <p className="text-neutral-700 mb-4">
+            <h3 className="text-2xl font-semibold mb-3 text-brand-neutral-900">Paso 2</h3>
+            <p className="text-brand-neutral-700 mb-4">
               Contacta directamente con los espacios que te interesan y negocia
               los términos que mejor se adapten a tus necesidades.
             </p>
             <Link
               href="/como-funciona#contacto"
-              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
+              className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium flex items-center"
             >
               Saber más
               <svg
@@ -160,8 +160,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
-            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all border border-brand-neutral-200 hover:border-brand-mauve-300">
+            <div className="w-14 h-14 bg-brand-mauve-100 text-brand-mauve-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -171,14 +171,14 @@ const HowItWorks = () => {
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             </div>
-            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 3</h3>
-            <p className="text-neutral-700 mb-4">
+            <h3 className="text-2xl font-semibold mb-3 text-brand-neutral-900">Paso 3</h3>
+            <p className="text-brand-neutral-700 mb-4">
               Exhibe tus productos y aumenta tu visibilidad. Aprovecha la
               exposición para impulsar tu marca y atraer nuevos clientes.
             </p>
             <Link
               href="/casos-exito"
-              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
+              className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium flex items-center"
             >
               Ver casos de éxito
               <svg
@@ -197,14 +197,14 @@ const HowItWorks = () => {
           </div>
         </div>
 
-        {/* Pasos para Showrooms */}
+        {/* Pasos para Showrooms con nuevos estilos */}
         <div
           className={`grid grid-cols-1 md:grid-cols-3 gap-8 ${
             activeTab === "showrooms" ? "block animate-fade-in" : "hidden"
           }`}
         >
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
-            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all border border-brand-neutral-200 hover:border-brand-mauve-300">
+            <div className="w-14 h-14 bg-brand-mauve-100 text-brand-mauve-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -218,14 +218,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 1</h3>
-            <p className="text-neutral-700 mb-4">
+            <h3 className="text-2xl font-semibold mb-3 text-brand-neutral-900">Paso 1</h3>
+            <p className="text-brand-neutral-700 mb-4">
               Crea un perfil detallado de tu espacio, incluyendo fotos de alta
               calidad, características y servicios que ofreces.
             </p>
             <Link
               href="/registro-showroom"
-              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
+              className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium flex items-center"
             >
               Registrar mi showroom
               <svg
@@ -243,8 +243,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
-            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all border border-brand-neutral-200 hover:border-brand-mauve-300">
+            <div className="w-14 h-14 bg-brand-mauve-100 text-brand-mauve-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -258,14 +258,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 2</h3>
-            <p className="text-neutral-700 mb-4">
+            <h3 className="text-2xl font-semibold mb-3 text-brand-neutral-900">Paso 2</h3>
+            <p className="text-brand-neutral-700 mb-4">
               Recibe solicitudes de marcas interesadas en tu espacio y selecciona
               las que mejor se adapten a tu visión y objetivos.
             </p>
             <Link
               href="/como-funciona#solicitudes"
-              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
+              className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium flex items-center"
             >
               Saber más
               <svg
@@ -283,8 +283,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
-            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all border border-brand-neutral-200 hover:border-brand-mauve-300">
+            <div className="w-14 h-14 bg-brand-mauve-100 text-brand-mauve-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -298,14 +298,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 3</h3>
-            <p className="text-neutral-700 mb-4">
+            <h3 className="text-2xl font-semibold mb-3 text-brand-neutral-900">Paso 3</h3>
+            <p className="text-brand-neutral-700 mb-4">
               Gestiona tus exhibiciones, optimiza la ocupación de tu espacio y
               genera ingresos constantes con un mínimo esfuerzo.
             </p>
             <Link
               href="/casos-exito?tipo=showroom"
-              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
+              className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium flex items-center"
             >
               Ver casos de éxito
               <svg
@@ -324,11 +324,11 @@ const HowItWorks = () => {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* CTA actualizado */}
         <div className="mt-16 text-center">
           <Link
             href="/registro"
-            className="btn btn-primary py-3 px-8 text-lg shadow-lg hover:shadow-xl"
+            className="btn btn-primary py-3 px-8 text-lg shadow-lg hover:shadow-xl transform transition-transform hover:-translate-y-1"
           >
             Registrarme ahora
           </Link>

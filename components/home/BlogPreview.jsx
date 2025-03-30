@@ -37,36 +37,36 @@ const BLOG_POSTS = [
   }
 ];
 
-// Mapa de colores para categorías
+// Mapa de colores para categorías - actualizado con la nueva paleta
 const CATEGORY_COLORS = {
-  "Tendencias": "bg-pink-100 text-pink-800",
-  "Consejos": "bg-blue-100 text-blue-800",
+  "Tendencias": "bg-brand-mauve-100 text-brand-mauve-800",
+  "Consejos": "bg-brand-celeste-100 text-brand-celeste-800",
   "Eventos": "bg-yellow-100 text-yellow-800",
-  "Industria": "bg-green-100 text-green-800",
-  "Entrevistas": "bg-purple-100 text-purple-800"
+  "Industria": "bg-emerald-100 text-emerald-800",
+  "Entrevistas": "bg-indigo-100 text-indigo-800"
 };
 
 const BlogPreview = () => {
   return (
-    <section className="py-20 bg-neutral-50">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4 text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-4 text-center">
           Tendencias y novedades
         </h2>
-        <p className="text-lg text-neutral-600 mb-12 text-center max-w-3xl mx-auto">
+        <p className="text-lg text-brand-neutral-600 mb-12 text-center max-w-3xl mx-auto">
           Explora nuestros artículos más recientes sobre las últimas tendencias, consejos prácticos y eventos de la industria de la moda.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {BLOG_POSTS.map((post) => (
-            <article key={post.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-neutral-200">
+            <article key={post.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group">
               <Link href={`/blog/${post.slug}`} className="block">
                 <div className="relative h-48 w-full">
                   {/* Placeholder para la imagen */}
-                  <div className="absolute inset-0 bg-neutral-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-brand-neutral-200 flex items-center justify-center group-hover:opacity-90 transition-opacity">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-12 w-12 text-neutral-500"
+                      className="h-12 w-12 text-brand-neutral-400 group-hover:text-brand-neutral-500 transition-colors"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -91,30 +91,37 @@ const BlogPreview = () => {
               
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${CATEGORY_COLORS[post.category] || "bg-neutral-100 text-neutral-800"}`}>
+                  <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${CATEGORY_COLORS[post.category] || "bg-brand-neutral-100 text-brand-neutral-800"}`}>
                     {post.category}
                   </span>
-                  <span className="text-xs text-neutral-500">{post.date}</span>
+                  <span className="text-xs text-brand-neutral-500">{post.date}</span>
                 </div>
                 
                 <Link href={`/blog/${post.slug}`} className="block">
-                  <h3 className="text-xl font-bold mb-3 hover:text-primary-600 transition-colors">
+                  <h3 className="text-xl font-bold mb-3 text-brand-neutral-900 group-hover:text-brand-mauve-600 transition-colors">
                     {post.title}
                   </h3>
                 </Link>
                 
-                <p className="text-neutral-600 text-sm mb-4">
+                <p className="text-brand-neutral-600 text-sm mb-4">
                   {post.excerpt}
                 </p>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-neutral-500">
-                    Por {post.author}
-                  </span>
+                  <div className="flex items-center">
+                    <div className="w-6 h-6 rounded-full bg-brand-neutral-200 flex items-center justify-center mr-2">
+                      <span className="text-xs font-medium text-brand-neutral-600">
+                        {post.author.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <span className="text-sm text-brand-neutral-600">
+                      {post.author}
+                    </span>
+                  </div>
                   
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center"
+                    className="text-brand-mauve-600 hover:text-brand-mauve-700 font-medium text-sm flex items-center"
                   >
                     Leer más
                     <svg
@@ -139,7 +146,7 @@ const BlogPreview = () => {
         <div className="mt-10 text-center">
           <Link
             href="/blog"
-            className="btn btn-outline py-2 px-6 hover:bg-primary-50"
+            className="btn btn-outline py-2 px-6 hover:bg-brand-mauve-50"
           >
             Visitar el blog
           </Link>

@@ -192,16 +192,16 @@ const FeaturedShowrooms = () => {
   }, [nextSlide, prevSlide]);
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
+    <section className="py-20 bg-brand-neutral-50 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900">
+          <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900">
             Showrooms destacados esta semana
           </h2>
           <div className="hidden md:flex space-x-2">
             <button
               onClick={prevSlide}
-              className="w-10 h-10 rounded-full bg-brand-teal-50 border border-brand-teal-200 hover:bg-brand-teal-100 transition-colors flex items-center justify-center text-brand-teal-700"
+              className="w-10 h-10 rounded-full bg-white border border-brand-neutral-200 hover:bg-brand-mauve-50 transition-colors flex items-center justify-center text-brand-mauve-700"
               aria-label="Ver showroom anterior"
             >
               <svg
@@ -221,7 +221,7 @@ const FeaturedShowrooms = () => {
             </button>
             <button
               onClick={nextSlide}
-              className="w-10 h-10 rounded-full bg-brand-teal-50 border border-brand-teal-200 hover:bg-brand-teal-100 transition-colors flex items-center justify-center text-brand-teal-700"
+              className="w-10 h-10 rounded-full bg-white border border-brand-neutral-200 hover:bg-brand-mauve-50 transition-colors flex items-center justify-center text-brand-mauve-700"
               aria-label="Ver siguiente showroom"
             >
               <svg
@@ -241,7 +241,7 @@ const FeaturedShowrooms = () => {
             </button>
             <button
               onClick={() => setIsPaused(!isPaused)}
-              className="w-10 h-10 rounded-full bg-brand-teal-50 border border-brand-teal-200 hover:bg-brand-teal-100 transition-colors flex items-center justify-center text-brand-teal-700"
+              className="w-10 h-10 rounded-full bg-white border border-brand-neutral-200 hover:bg-brand-mauve-50 transition-colors flex items-center justify-center text-brand-mauve-700"
               aria-label={isPaused ? "Reanudar presentación automática" : "Pausar presentación automática"}
             >
               {isPaused ? (
@@ -285,7 +285,7 @@ const FeaturedShowrooms = () => {
           </div>
         </div>
 
-        {/* Carrusel mejorado */}
+        {/* Carrusel mejorado con el nuevo diseño */}
         <div 
           className="relative"
           onMouseEnter={() => setIsHovering(true)}
@@ -313,7 +313,7 @@ const FeaturedShowrooms = () => {
                   aria-roledescription="slide"
                   aria-label={`${index + 1} de ${SHOWROOMS_DATA.length}`}
                 >
-                  <div className="h-full bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-neutral-200 group">
+                  <div className="h-full bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group">
                     <div className="relative h-64 w-full overflow-hidden">
                       <PlaceholderImage
                         src={showroom.image}
@@ -322,21 +322,21 @@ const FeaturedShowrooms = () => {
                         fill
                         placeholderType="showroom"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-neutral-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute bottom-0 left-0 w-full p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <span className="inline-block bg-brand-coral-600 text-white text-xs font-medium px-2 py-1 rounded-full mb-2">
+                        <span className="inline-block bg-brand-celeste-300 text-brand-neutral-900 text-xs font-medium px-2 py-1 rounded-full mb-2">
                           {showroom.basePrice}€/día
                         </span>
                       </div>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-semibold mb-1 group-hover:text-brand-teal-600 transition-colors">
+                      <h3 className="text-xl font-semibold mb-1 group-hover:text-brand-mauve-600 transition-colors">
                         {showroom.name}
                       </h3>
-                      <p className="text-neutral-600 mb-3 flex items-center">
+                      <p className="text-brand-neutral-600 mb-3 flex items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 mr-1 text-brand-teal-500"
+                          className="h-4 w-4 mr-1 text-brand-mauve-400"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -360,7 +360,7 @@ const FeaturedShowrooms = () => {
                         {showroom.specialties.map((specialty, idx) => (
                           <span
                             key={idx}
-                            className="bg-brand-teal-50 text-brand-teal-700 text-xs font-medium py-1 px-2 rounded-full"
+                            className="badge badge-primary py-1 px-2 rounded-full"
                           >
                             {specialty}
                           </span>
@@ -368,7 +368,7 @@ const FeaturedShowrooms = () => {
                       </div>
                       <div className="flex justify-between items-center mb-4">
                         <div>
-                          <span className="text-neutral-700 text-sm">
+                          <span className="text-brand-neutral-700 text-sm">
                             Capacidad:
                           </span>{" "}
                           <span className="font-medium">{showroom.capacity} marcas</span>
@@ -386,7 +386,7 @@ const FeaturedShowrooms = () => {
                                     ? "text-yellow-400"
                                     : i < showroom.rating
                                     ? "text-yellow-400" // Para estrellas parciales
-                                    : "text-neutral-300"
+                                    : "text-brand-neutral-300"
                                 }`}
                                 viewBox="0 0 20 20"
                                 fill="currentColor"
@@ -395,13 +395,13 @@ const FeaturedShowrooms = () => {
                               </svg>
                             ))}
                           </div>
-                          <span className="text-sm text-neutral-700 ml-1">
+                          <span className="text-sm text-brand-neutral-700 ml-1">
                             {showroom.rating}
                           </span>
                         </div>
                         <Link
                           href={`/showrooms/${showroom.slug}`}
-                          className="text-white bg-brand-teal-600 hover:bg-brand-teal-700 font-medium text-sm px-3 py-1.5 rounded-md transition-colors"
+                          className="text-white bg-brand-mauve-600 hover:bg-brand-mauve-700 font-medium text-sm px-3 py-1.5 rounded-md transition-colors"
                         >
                           Ver detalles
                         </Link>
@@ -413,7 +413,7 @@ const FeaturedShowrooms = () => {
             </div>
           </div>
 
-          {/* Indicadores de diapositivas (bullets) */}
+          {/* Indicadores de diapositivas (bullets) con nuevo estilo */}
           <div className="flex justify-center mt-8 space-x-2">
             {Array.from({ length: SHOWROOMS_DATA.length - cardsInView + 1 }).map((_, index) => (
               <button
@@ -421,8 +421,8 @@ const FeaturedShowrooms = () => {
                 onClick={() => goToSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all ${
                   currentIndex === index
-                    ? "bg-brand-teal-600 w-6"
-                    : "bg-neutral-300 hover:bg-neutral-400"
+                    ? "bg-brand-mauve-600 w-6"
+                    : "bg-brand-neutral-300 hover:bg-brand-neutral-400"
                 }`}
                 aria-label={`Ir a diapositiva ${index + 1}`}
                 aria-current={currentIndex === index ? "true" : "false"}
@@ -432,13 +432,13 @@ const FeaturedShowrooms = () => {
           
           {/* Botones de navegación laterales para móvil y tablets */}
           <button
-            className="absolute top-1/2 left-0 transform -translate-y-1/2 md:hidden bg-white bg-opacity-60 hover:bg-opacity-90 w-10 h-10 rounded-full shadow-md flex items-center justify-center z-10"
+            className="absolute top-1/2 left-0 transform -translate-y-1/2 md:hidden bg-white bg-opacity-90 hover:bg-opacity-100 w-10 h-10 rounded-full shadow-md flex items-center justify-center z-10"
             onClick={prevSlide}
             aria-label="Ver showroom anterior"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-neutral-800"
+              className="h-5 w-5 text-brand-neutral-800"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -447,13 +447,13 @@ const FeaturedShowrooms = () => {
             </svg>
           </button>
           <button
-            className="absolute top-1/2 right-0 transform -translate-y-1/2 md:hidden bg-white bg-opacity-60 hover:bg-opacity-90 w-10 h-10 rounded-full shadow-md flex items-center justify-center z-10"
+            className="absolute top-1/2 right-0 transform -translate-y-1/2 md:hidden bg-white bg-opacity-90 hover:bg-opacity-100 w-10 h-10 rounded-full shadow-md flex items-center justify-center z-10"
             onClick={nextSlide}
             aria-label="Ver siguiente showroom"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-neutral-800"
+              className="h-5 w-5 text-brand-neutral-800"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -466,7 +466,7 @@ const FeaturedShowrooms = () => {
         <div className="mt-10 text-center">
           <Link
             href="/showrooms"
-            className="btn btn-outline py-2 px-6 hover:bg-brand-teal-50"
+            className="btn btn-outline py-2 px-6 hover:bg-brand-mauve-50"
           >
             Ver todos los showrooms
           </Link>

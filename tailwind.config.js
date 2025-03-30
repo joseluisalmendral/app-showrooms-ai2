@@ -8,63 +8,50 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Colores primarios basados en el logo
-        'brand-teal': {
-          50: '#e6f0ee',
-          100: '#b0d2ca',
-          200: '#8abfb1',
-          300: '#5aa28f',
-          400: '#3a8e7a',
-          500: '#2D5C50', // Color principal del marco
-          600: '#244a40',
-          700: '#1b3730',
-          800: '#122520',
-          900: '#091210',
+        // Nueva paleta de colores moderna
+        'brand-mauve': {
+          50: '#f4efff',
+          100: '#e9dfff',
+          200: '#d7c1ff',
+          300: '#c5a3ff', // Color principal (mauve)
+          400: '#b285ff',
+          500: '#9f68fc',
+          600: '#8a4cef',
+          700: '#7538d7',
+          800: '#6029c1',
+          900: '#4f1e9e',
         },
-        // Color secundario basado en la percha
-        'brand-coral': {
-          50: '#feefed',
-          100: '#fccdca',
-          200: '#fabaae',
-          300: '#f6988d',
-          400: '#f4857a',
-          500: '#E27863', // Color de la percha
-          600: '#c66051',
-          700: '#984a3f',
-          800: '#6b342d',
-          900: '#3d1e19',
+        'brand-celeste': {
+          50: '#f0fbfb',
+          100: '#dcf7f7',
+          200: '#bef0f1',
+          300: '#a9e5e6', // Color secundario (celeste)
+          400: '#86cfd1',
+          500: '#5db4b6',
+          600: '#458e90',
+          700: '#367273',
+          800: '#2c5c5d',
+          900: '#254d4e',
         },
-        // Beige para fondos y neutrales
-        'brand-beige': {
-          50: '#fdfdfb',
-          100: '#f9f8f0',
-          200: '#F2EFDF', // Color del fondo
-          300: '#e6e1c2',
-          400: '#d8d1a6',
-          500: '#c9c08a',
-          600: '#b3a96f',
-          700: '#938a57',
-          800: '#6e6841',
-          900: '#494529',
-        },
-        // Mantenemos alguna neutrales para textos y bordes
-        'neutral': {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
+        // Colores neutrales
+        'brand-neutral': {
+          50: '#f7f7f7', // seasalt
+          100: '#f1f1f1',
+          200: '#e0e0e0', // platinum
+          300: '#d1d1d1',
+          400: '#b4b4b4',
+          500: '#9a9a9a',
+          600: '#818181',
+          700: '#6a6a6a',
+          800: '#484848',
+          900: '#272727',
+          950: '#0d0d0d', // night
         },
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'monospace'],
-        // Fuentes con estilo manuscrito para títulos, para que coincidan con el logo
+        // Mantener fuentes con estilo manuscrito para títulos, para complementar el diseño
         handwritten: ['Caveat', 'Indie Flower', 'cursive'],
         heading: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         body: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
@@ -87,9 +74,6 @@ module.exports = {
         '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         'inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
         'none': 'none',
-      },
-      backgroundImage: {
-        'brushstroke-pattern': "url('/images/brushstroke-pattern.svg')",
       },
     },
   },

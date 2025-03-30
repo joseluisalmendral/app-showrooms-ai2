@@ -51,26 +51,29 @@ const SUCCESS_STORIES = [
 
 const SuccessStories = () => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-brand-neutral-50">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-12 text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-6 text-center">
           Historias de éxito
         </h2>
+        <p className="text-lg text-brand-neutral-600 mb-12 text-center max-w-3xl mx-auto">
+          Descubre cómo marcas y showrooms han potenciado su negocio a través de nuestra plataforma
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {SUCCESS_STORIES.map((story) => (
             <div
               key={story.id}
-              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-neutral-200"
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 group"
             >
               <div className="p-6">
-                <div className="flex items-center mb-6">
-                  <div className="w-16 h-16 relative rounded-full overflow-hidden bg-neutral-200 flex-shrink-0 mr-4">
+                <div className="flex items-start mb-6 gap-4">
+                  <div className="w-16 h-16 relative rounded-lg overflow-hidden bg-brand-neutral-200 flex-shrink-0">
                     {/* Placeholder para la foto */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-neutral-500"
+                        className={`h-8 w-8 ${story.type === "marca" ? "text-brand-mauve-400" : "text-brand-celeste-400"}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -101,33 +104,52 @@ const SuccessStories = () => {
                     /> */}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold">{story.name}</h3>
-                    <p className="text-neutral-600">
-                      {story.location} • {story.type === "marca" ? "Marca" : "Showroom"}
-                    </p>
+                    <h3 className="text-xl font-semibold text-brand-neutral-900 group-hover:text-brand-mauve-600 transition-colors">
+                      {story.name}
+                    </h3>
+                    <div className="flex items-center text-brand-neutral-600 text-sm">
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-4 w-4 mr-1" 
+                        viewBox="0 0 20 20" 
+                        fill="currentColor"
+                      >
+                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                      </svg>
+                      {story.location} 
+                      <span className="mx-2">•</span>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                        story.type === "marca" 
+                          ? "bg-brand-mauve-100 text-brand-mauve-800" 
+                          : "bg-brand-celeste-100 text-brand-celeste-800"
+                      }`}
+                      >
+                        {story.type === "marca" ? "Marca" : "Showroom"}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <blockquote className="italic text-neutral-700 mb-6 relative">
+                <blockquote className="italic text-brand-neutral-700 mb-6 relative">
                   <svg
-                    className="absolute top-0 left-0 transform -translate-x-3 -translate-y-3 h-8 w-8 text-neutral-200"
+                    className="absolute top-0 left-0 transform -translate-x-3 -translate-y-3 h-8 w-8 text-brand-mauve-100"
                     fill="currentColor"
                     viewBox="0 0 32 32"
                     aria-hidden="true"
                   >
                     <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.896 3.456-8.352 9.12-8.352 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
                   </svg>
-                  <p className="relative">{story.quote}</p>
+                  <p className="relative pl-4">{story.quote}</p>
                 </blockquote>
 
-                <div className="border-t border-neutral-200 pt-4">
-                  <h4 className="font-medium text-neutral-900 mb-2">Resultados clave:</h4>
+                <div className="border-t border-brand-neutral-200 pt-4">
+                  <h4 className="font-medium text-brand-neutral-900 mb-2">Resultados clave:</h4>
                   <ul className="space-y-1">
                     {story.results.map((result, index) => (
                       <li key={index} className="flex items-center text-sm">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 text-green-500 mr-2"
+                          className="h-4 w-4 text-green-500 mr-2 flex-shrink-0"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
@@ -137,7 +159,7 @@ const SuccessStories = () => {
                             clipRule="evenodd"
                           />
                         </svg>
-                        {result}
+                        <span className="text-brand-neutral-700">{result}</span>
                       </li>
                     ))}
                   </ul>
@@ -146,7 +168,7 @@ const SuccessStories = () => {
                 <div className="mt-6 text-right">
                   <Link
                     href={`/casos-exito/${story.slug}`}
-                    className="text-primary-600 hover:text-primary-700 font-medium flex items-center justify-end"
+                    className="inline-flex items-center font-medium text-brand-mauve-600 hover:text-brand-mauve-700 transition-colors"
                   >
                     Leer más
                     <svg
@@ -166,6 +188,27 @@ const SuccessStories = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Link
+            href="/casos-exito"
+            className="inline-flex items-center btn btn-primary py-2 px-6"
+          >
+            Ver todas las historias
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 ml-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

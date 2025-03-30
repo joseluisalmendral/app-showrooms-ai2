@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-brand-beige-200 sticky top-0 z-50 border-b-2 border-brand-teal-500">
+    <nav className="bg-white sticky top-0 z-50 shadow-sm border-b border-brand-neutral-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -32,7 +32,7 @@ const Navbar = () => {
                   height={56} 
                   className="mr-3"
                 />
-                <span className="font-handwritten text-3xl font-bold text-brand-teal-700">The Showroom App</span>
+                <span className="font-handwritten text-3xl font-bold text-brand-mauve-700">The Showroom App</span>
               </div>
             </Link>
           </div>
@@ -42,7 +42,7 @@ const Navbar = () => {
             <div className="flex space-x-10 justify-center">
               {/* Dropdown Marcas */}
               <div className="relative group flex items-center">
-                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors">
+                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-brand-neutral-800 hover:text-brand-mauve-600 transition-colors">
                   Marcas
                   <svg
                     className="ml-1 h-4 w-4"
@@ -59,47 +59,47 @@ const Navbar = () => {
                   </svg>
                 </button>
 
-                {/* Dropdown content - Corregido para aparecer debajo del botón */}
-                <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border-2 border-brand-teal-500">
+                {/* Dropdown content */}
+                <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-brand-neutral-200">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <Link
                       href="/marcas/casual"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Casual
                     </Link>
                     <Link
                       href="/marcas/urbano"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Urbano
                     </Link>
                     <Link
                       href="/marcas/formal"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Formal
                     </Link>
                     <Link
                       href="/marcas/streetwear"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Streetwear
                     </Link>
                     <Link
                       href="/marcas/sostenible"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Sostenible
                     </Link>
                     <Link
                       href="/marcas"
-                      className="block px-4 py-2 text-sm font-medium text-brand-teal-600 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm font-medium text-brand-mauve-600 hover:bg-brand-neutral-50"
                       role="menuitem"
                     >
                       Ver todas
@@ -110,7 +110,7 @@ const Navbar = () => {
 
               {/* Dropdown Showrooms */}
               <div className="relative group flex items-center">
-                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors">
+                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-brand-neutral-800 hover:text-brand-mauve-600 transition-colors">
                   Showrooms
                   <svg
                     className="ml-1 h-4 w-4"
@@ -127,40 +127,40 @@ const Navbar = () => {
                   </svg>
                 </button>
 
-                {/* Dropdown content - Corregido para aparecer debajo del botón */}
-                <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border-2 border-brand-teal-500">
+                {/* Dropdown content */}
+                <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-brand-neutral-200">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <Link
                       href="/showrooms/filtrar?ubicacion=madrid"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Madrid
                     </Link>
                     <Link
                       href="/showrooms/filtrar?ubicacion=barcelona"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Barcelona
                     </Link>
                     <Link
                       href="/showrooms/filtrar?capacidad=pequeño"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Pequeños (1-5 marcas)
                     </Link>
                     <Link
                       href="/showrooms/filtrar?capacidad=grande"
-                      className="block px-4 py-2 text-sm text-neutral-700 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-50 hover:text-brand-mauve-600"
                       role="menuitem"
                     >
                       Grandes (6+ marcas)
                     </Link>
                     <Link
                       href="/showrooms"
-                      className="block px-4 py-2 text-sm font-medium text-brand-teal-600 hover:bg-brand-beige-100"
+                      className="block px-4 py-2 text-sm font-medium text-brand-mauve-600 hover:bg-brand-neutral-50"
                       role="menuitem"
                     >
                       Ver todos
@@ -172,7 +172,7 @@ const Navbar = () => {
               {/* Enlace Cómo Funciona */}
               <Link
                 href="/como-funciona"
-                className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors"
+                className="inline-flex items-center px-2 py-2 text-base font-medium text-brand-neutral-800 hover:text-brand-mauve-600 transition-colors"
               >
                 Cómo funciona
               </Link>
@@ -183,7 +183,7 @@ const Navbar = () => {
           <div className="hidden sm:flex sm:items-center">
             <button
               onClick={toggleLoginModal}
-              className="btn btn-primary text-white shadow-md hover:shadow-lg"
+              className="btn btn-primary text-white shadow-sm hover:shadow-md"
             >
               Iniciar sesión / Registrarse
             </button>
@@ -193,7 +193,7 @@ const Navbar = () => {
           <div className="flex items-center sm:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-neutral-700 hover:text-brand-teal-700 hover:bg-brand-beige-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-teal-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-brand-neutral-700 hover:text-brand-mauve-600 hover:bg-brand-neutral-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-mauve-300"
             >
               <span className="sr-only">Abrir menú principal</span>
               {/* Icono menú hamburguesa */}
@@ -234,29 +234,29 @@ const Navbar = () => {
       </div>
 
       {/* Menú móvil */}
-      <div className={`${mobileMenuOpen ? "block" : "hidden"} sm:hidden bg-brand-beige-200`}>
+      <div className={`${mobileMenuOpen ? "block" : "hidden"} sm:hidden bg-white border-t border-brand-neutral-100`}>
         <div className="pt-2 pb-3 space-y-1">
           <Link
             href="/marcas"
-            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-brand-beige-100 hover:border-brand-teal-300"
+            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-brand-neutral-700 hover:text-brand-neutral-800 hover:bg-brand-neutral-50 hover:border-brand-mauve-300"
           >
             Marcas
           </Link>
           <Link
             href="/showrooms"
-            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-brand-beige-100 hover:border-brand-teal-300"
+            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-brand-neutral-700 hover:text-brand-neutral-800 hover:bg-brand-neutral-50 hover:border-brand-mauve-300"
           >
             Showrooms
           </Link>
           <Link
             href="/como-funciona"
-            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-neutral-700 hover:text-neutral-900 hover:bg-brand-beige-100 hover:border-brand-teal-300"
+            className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-brand-neutral-700 hover:text-brand-neutral-800 hover:bg-brand-neutral-50 hover:border-brand-mauve-300"
           >
             Cómo funciona
           </Link>
           <button
             onClick={toggleLoginModal}
-            className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-brand-teal-500 text-base font-medium text-brand-teal-700 bg-brand-teal-50"
+            className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-brand-mauve-300 text-base font-medium text-brand-mauve-700 bg-brand-mauve-50"
           >
             Iniciar sesión / Registrarse
           </button>
@@ -265,12 +265,12 @@ const Navbar = () => {
 
       {/* Modal de Login */}
       {loginModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-brand-beige-50 rounded-lg max-w-md w-full p-6 relative border-2 border-brand-teal-500">
+        <div className="fixed inset-0 bg-brand-neutral-950 bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 relative shadow-xl">
             {/* Botón de cerrar */}
             <button
               onClick={toggleLoginModal}
-              className="absolute top-3 right-3 text-neutral-500 hover:text-neutral-700"
+              className="absolute top-3 right-3 text-brand-neutral-500 hover:text-brand-neutral-700"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -289,17 +289,17 @@ const Navbar = () => {
             </button>
 
             {/* Título del modal */}
-            <h2 className="text-3xl font-bold text-center mb-6 font-handwritten text-brand-teal-700">
+            <h2 className="text-3xl font-bold text-center mb-6 font-handwritten text-brand-mauve-700">
               Iniciar sesión / Registrarse
             </h2>
 
             {/* Selector de tipo de usuario */}
-            <div className="flex border border-neutral-300 rounded-lg mb-6 overflow-hidden">
+            <div className="flex border border-brand-neutral-200 rounded-lg mb-6 overflow-hidden">
               <button
                 className={`flex-1 py-2 text-center ${
                   userType === "marca"
-                    ? "bg-brand-teal-600 text-white"
-                    : "bg-white text-neutral-700 hover:bg-brand-beige-100"
+                    ? "bg-brand-mauve-300 text-white"
+                    : "bg-white text-brand-neutral-700 hover:bg-brand-neutral-50"
                 }`}
                 onClick={() => setUserType("marca")}
               >
@@ -308,8 +308,8 @@ const Navbar = () => {
               <button
                 className={`flex-1 py-2 text-center ${
                   userType === "showroom"
-                    ? "bg-brand-teal-600 text-white"
-                    : "bg-white text-neutral-700 hover:bg-brand-beige-100"
+                    ? "bg-brand-mauve-300 text-white"
+                    : "bg-white text-brand-neutral-700 hover:bg-brand-neutral-50"
                 }`}
                 onClick={() => setUserType("showroom")}
               >
@@ -322,7 +322,7 @@ const Navbar = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-neutral-700 mb-1"
+                  className="block text-sm font-medium text-brand-neutral-700 mb-1"
                 >
                   Correo electrónico
                 </label>
@@ -330,7 +330,7 @@ const Navbar = () => {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-teal-500 focus:border-brand-teal-500"
+                  className="w-full px-3 py-2 border border-brand-neutral-200 rounded-md shadow-sm focus:outline-none focus:ring-brand-mauve-300 focus:border-brand-mauve-300"
                   placeholder="tucorreo@ejemplo.com"
                   required
                 />
@@ -338,7 +338,7 @@ const Navbar = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-neutral-700 mb-1"
+                  className="block text-sm font-medium text-brand-neutral-700 mb-1"
                 >
                   Contraseña
                 </label>
@@ -346,7 +346,7 @@ const Navbar = () => {
                   type="password"
                   id="password"
                   name="password"
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-teal-500 focus:border-brand-teal-500"
+                  className="w-full px-3 py-2 border border-brand-neutral-200 rounded-md shadow-sm focus:outline-none focus:ring-brand-mauve-300 focus:border-brand-mauve-300"
                   placeholder="••••••••"
                   required
                 />
@@ -357,18 +357,18 @@ const Navbar = () => {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-brand-teal-600 focus:ring-brand-teal-500 border-neutral-300 rounded"
+                    className="h-4 w-4 text-brand-mauve-600 focus:ring-brand-mauve-300 border-brand-neutral-300 rounded"
                   />
                   <label
                     htmlFor="remember-me"
-                    className="ml-2 block text-sm text-neutral-700"
+                    className="ml-2 block text-sm text-brand-neutral-700"
                   >
                     Recordarme
                   </label>
                 </div>
                 <a
                   href="#"
-                  className="text-sm font-medium text-brand-teal-600 hover:text-brand-teal-500"
+                  className="text-sm font-medium text-brand-mauve-600 hover:text-brand-mauve-500"
                 >
                   ¿Olvidaste tu contraseña?
                 </a>
@@ -376,13 +376,13 @@ const Navbar = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full btn btn-primary py-2 px-4 text-white bg-brand-teal-600 hover:bg-brand-teal-700"
+                  className="w-full btn btn-primary py-2 px-4 text-white"
                 >
                   Iniciar sesión
                 </button>
               </div>
               <div className="text-center">
-                <span className="text-sm text-neutral-700">o</span>
+                <span className="text-sm text-brand-neutral-700">o</span>
               </div>
               <div>
                 <button
@@ -415,12 +415,12 @@ const Navbar = () => {
                 </button>
               </div>
               <div className="text-center text-sm">
-                <span className="text-neutral-700">
+                <span className="text-brand-neutral-700">
                   ¿No tienes una cuenta?{" "}
                 </span>
                 <a
                   href="#"
-                  className="font-medium text-brand-teal-600 hover:text-brand-teal-500"
+                  className="font-medium text-brand-mauve-600 hover:text-brand-mauve-500"
                 >
                   Regístrate
                 </a>

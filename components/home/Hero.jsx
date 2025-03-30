@@ -131,8 +131,8 @@ const Hero = () => {
     <section className="relative py-20 md:py-32 overflow-hidden">
       {/* Contenedor de background con imagen/video */}
       <div className="absolute inset-0 z-0">
-        {/* Overlay con opacidad equilibrada */}
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/75 to-neutral-800/70 z-10"></div>
+        {/* Overlay con opacidad equilibrada y gradiente moderno */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-neutral-950/70 via-brand-neutral-900/60 to-brand-mauve-900/60 z-10"></div>
         
         {/* Imagen de fondo estática (visible hasta que el video cargue) */}
         <div className={`absolute inset-0 transition-opacity duration-1000 ${videoLoaded ? 'opacity-0' : 'opacity-100'}`}>
@@ -169,19 +169,19 @@ const Hero = () => {
             Encuentra el showroom perfecto para tu marca o las marcas ideales para tu espacio. Potencia tu negocio con nuestra plataforma especializada.
           </p>
 
-          {/* Formulario de búsqueda con autocompletado */}
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          {/* Formulario de búsqueda con autocompletado - Diseño moderno */}
+          <div className="bg-white p-6 rounded-xl shadow-xl backdrop-blur-sm bg-opacity-95">
             <form onSubmit={handleSearch} className="space-y-6">
               <div className="md:flex md:items-center md:space-x-4">
-                {/* Selector tipo radio */}
+                {/* Selector tipo radio con diseño moderno */}
                 <div className="w-full md:w-auto mb-4 md:mb-0">
-                  <div className="flex border border-neutral-300 rounded-lg overflow-hidden">
+                  <div className="flex border border-brand-neutral-200 rounded-lg overflow-hidden shadow-sm">
                     <button
                       type="button"
                       className={`flex-1 py-2 px-4 text-center whitespace-nowrap ${
                         searchType === "marcas"
-                          ? "bg-brand-teal-600 text-white"
-                          : "bg-white text-neutral-700 hover:bg-neutral-100"
+                          ? "bg-brand-mauve-300 text-white"
+                          : "bg-white text-brand-neutral-700 hover:bg-brand-neutral-50"
                       }`}
                       onClick={() => setSearchType("marcas")}
                     >
@@ -191,8 +191,8 @@ const Hero = () => {
                       type="button"
                       className={`flex-1 py-2 px-4 text-center whitespace-nowrap ${
                         searchType === "showrooms"
-                          ? "bg-brand-teal-600 text-white"
-                          : "bg-white text-neutral-700 hover:bg-neutral-100"
+                          ? "bg-brand-mauve-300 text-white"
+                          : "bg-white text-brand-neutral-700 hover:bg-brand-neutral-50"
                       }`}
                       onClick={() => setSearchType("showrooms")}
                     >
@@ -210,7 +210,7 @@ const Hero = () => {
                         ref={inputRef}
                         type="text"
                         placeholder="Ubicación (ciudad, país...)"
-                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500"
+                        className="w-full px-4 py-2 border border-brand-neutral-200 rounded-lg focus:ring-2 focus:ring-brand-mauve-300 focus:border-brand-mauve-300 shadow-sm"
                         value={location}
                         onChange={handleLocationChange}
                         onFocus={handleLocationFocus}
@@ -220,7 +220,7 @@ const Hero = () => {
                       {/* Icono indicador de que hay un desplegable */}
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <svg 
-                          className="h-5 w-5 text-gray-400" 
+                          className="h-5 w-5 text-brand-neutral-400" 
                           xmlns="http://www.w3.org/2000/svg" 
                           viewBox="0 0 20 20" 
                           fill="currentColor" 
@@ -231,19 +231,19 @@ const Hero = () => {
                       </div>
                     </div>
                     
-                    {/* Lista de sugerencias de autocompletado - ahora muestra inmediatamente al hacer clic */}
+                    {/* Lista de sugerencias de autocompletado - diseño mejorado */}
                     {showSuggestions && filteredLocations.length > 0 && (
-                      <ul className="absolute z-10 mt-1 w-full bg-white border border-neutral-200 rounded-md shadow-lg max-h-60 overflow-auto">
+                      <ul className="absolute z-10 mt-1 w-full bg-white border border-brand-neutral-200 rounded-md shadow-lg max-h-60 overflow-auto">
                         {filteredLocations.map((loc, index) => (
                           <li
                             key={index}
-                            className="px-4 py-2 hover:bg-brand-beige-100 cursor-pointer text-neutral-700"
+                            className="px-4 py-2 hover:bg-brand-mauve-50 cursor-pointer text-brand-neutral-700"
                             onClick={() => handleSelectLocation(loc)}
                           >
                             <div className="flex items-center">
                               <svg 
                                 xmlns="http://www.w3.org/2000/svg" 
-                                className="h-4 w-4 mr-2 text-brand-teal-600" 
+                                className="h-4 w-4 mr-2 text-brand-mauve-400" 
                                 viewBox="0 0 20 20" 
                                 fill="currentColor"
                               >
@@ -260,7 +260,7 @@ const Hero = () => {
                   {/* Dropdown de estilos */}
                   <div className="flex-1">
                     <select
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500 appearance-none bg-white"
+                      className="w-full px-4 py-2 border border-brand-neutral-200 rounded-lg focus:ring-2 focus:ring-brand-mauve-300 focus:border-brand-mauve-300 appearance-none bg-white shadow-sm"
                       value={style}
                       onChange={(e) => setStyle(e.target.value)}
                     >
@@ -277,7 +277,7 @@ const Hero = () => {
                   <div className="md:w-auto">
                     <button
                       type="submit"
-                      className="w-full md:w-auto px-6 py-2 bg-brand-coral-600 hover:bg-brand-coral-700 text-white font-medium rounded-lg transition-colors shadow-md"
+                      className="w-full md:w-auto px-6 py-2 bg-brand-celeste-300 hover:bg-brand-celeste-400 text-brand-neutral-900 font-medium rounded-lg transition-colors shadow-md"
                     >
                       Buscar
                     </button>
@@ -287,7 +287,7 @@ const Hero = () => {
             </form>
           </div>
 
-          {/* Indicadores */}
+          {/* Indicadores con diseño moderno */}
           <div className="flex flex-wrap gap-x-10 gap-y-4 mt-10 text-white">
             <div className="flex items-center">
               <div className="text-3xl font-bold mr-2 drop-shadow-md">500+</div>

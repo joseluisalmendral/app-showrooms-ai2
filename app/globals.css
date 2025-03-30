@@ -4,8 +4,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #F2EFDF;
-  --foreground: #171717;
+  --background: #f7f7f7; /* seasalt */
+  --foreground: #0d0d0d; /* night */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-handwritten: 'Caveat', cursive;
@@ -13,8 +13,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #171717;
-    --foreground: #F2EFDF;
+    --background: #0d0d0d; /* night */
+    --foreground: #f7f7f7; /* seasalt */
   }
 }
 
@@ -29,26 +29,10 @@ a, button {
   transition: all 0.2s ease-in-out;
 }
 
-/* Estilo base para tarjetas con borde estilo boceto */
+/* Estilo base para tarjetas con borde moderno */
 .card {
-  @apply bg-white rounded-lg shadow-md overflow-hidden border-2 border-brand-teal-600 relative;
+  @apply bg-white rounded-lg shadow-md overflow-hidden border border-brand-neutral-200 relative;
   background-clip: padding-box;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 0.5rem;
-  background: linear-gradient(135deg, #2D5C50 0%, #2D5C50 100%);
-  mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
 }
 
 .card:hover {
@@ -60,7 +44,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Estilos de tipografía basados en el logo */
+/* Estilos de tipografía */
 h1, .h1 {
   @apply text-4xl font-bold tracking-tight md:text-5xl font-handwritten;
 }
@@ -89,21 +73,21 @@ p {
   @apply text-base leading-relaxed;
 }
 
-/* Estilos de botones inspirados en el logo - Mejorados para contraste */
+/* Estilos de botones modernos */
 .btn {
   @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all;
 }
 
 .btn-primary {
-  @apply bg-brand-teal-600 text-white hover:bg-brand-teal-700 focus:ring-brand-teal-500;
+  @apply bg-brand-mauve-300 text-white hover:bg-brand-mauve-400 focus:ring-brand-mauve-300;
 }
 
 .btn-secondary {
-  @apply bg-brand-coral-600 text-white hover:bg-brand-coral-700 focus:ring-brand-coral-500;
+  @apply bg-brand-celeste-300 text-brand-neutral-900 hover:bg-brand-celeste-400 focus:ring-brand-celeste-300;
 }
 
 .btn-outline {
-  @apply bg-transparent border-2 border-brand-teal-600 text-brand-teal-700 hover:bg-brand-teal-50 focus:ring-brand-teal-500;
+  @apply bg-transparent border-2 border-brand-mauve-300 text-brand-mauve-700 hover:bg-brand-mauve-50 focus:ring-brand-mauve-300;
 }
 
 /* Contenedores */
@@ -111,10 +95,9 @@ p {
   @apply mx-auto px-4 sm:px-6 lg:px-8;
 }
 
-/* Clase para bordes con estilo de trazo de pincel */
-.brush-border {
-  @apply relative;
-  box-shadow: 0 0 0 2px #2D5C50;
+/* Clase para bordes sutiles */
+.modern-border {
+  @apply relative border border-brand-neutral-200;
   border-radius: 0.25rem;
 }
 
@@ -128,40 +111,21 @@ p {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Estilo personalizado de marca inspirado en el logo */
-.brand-hanger {
-  position: relative;
-  display: inline-block;
-}
-
-.brand-hanger::before {
-  content: "";
-  background-image: url('/images/hanger-icon.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 1.5em;
-  width: 1.5em;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 0.5em;
-}
-
 /* Estilos específicos para mejorar accesibilidad y contraste */
 .text-muted {
-  @apply text-neutral-700;
+  @apply text-brand-neutral-700;
 }
 
 .text-light-muted {
-  @apply text-neutral-600;
+  @apply text-brand-neutral-600;
 }
 
 .text-primary {
-  @apply text-brand-teal-700;
+  @apply text-brand-mauve-700;
 }
 
 .text-secondary {
-  @apply text-brand-coral-700;
+  @apply text-brand-celeste-700;
 }
 
 /* Mejoras para elementos form */
@@ -176,14 +140,32 @@ select {
 
 /* Mejoras de accesibilidad para focos */
 a:focus, button:focus, input:focus, select:focus, textarea:focus {
-  @apply outline-none ring-2 ring-brand-teal-500 ring-offset-2;
+  @apply outline-none ring-2 ring-brand-mauve-300 ring-offset-2;
 }
 
-/* Evitar que el texto sea demasiado claro */
-.text-neutral-400 {
-  @apply text-neutral-500;
+/* Nuevos componentes de diseño */
+.gradient-bg {
+  @apply bg-gradient-to-r from-brand-mauve-300 to-brand-celeste-300;
 }
 
-.text-white\/80, .text-white\/70, .text-white\/60 {
-  @apply text-white;
+.glassmorphism {
+  @apply bg-white bg-opacity-70 backdrop-blur-sm border border-white border-opacity-20 shadow-md;
+}
+
+/* Tarjetas con estilo más moderno */
+.modern-card {
+  @apply bg-white rounded-xl shadow-md hover:shadow-xl transition-all border border-brand-neutral-200 overflow-hidden;
+}
+
+/* Badge moderno */
+.badge {
+  @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+.badge-primary {
+  @apply bg-brand-mauve-100 text-brand-mauve-800;
+}
+
+.badge-secondary {
+  @apply bg-brand-celeste-100 text-brand-celeste-800;
 }
