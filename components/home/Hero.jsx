@@ -3,12 +3,71 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
+// Datos de ejemplo para el autocompletado de ubicaciones
+const LOCATIONS = [
+  "Madrid, España",
+  "Barcelona, España",
+  "Valencia, España",
+  "Sevilla, España",
+  "Bilbao, España",
+  "Zaragoza, España",
+  "Málaga, España",
+  "Murcia, España",
+  "Palma de Mallorca, España",
+  "Las Palmas, España",
+  "Alicante, España",
+  "Córdoba, España",
+  "Valladolid, España",
+  "Vigo, España",
+  "Gijón, España",
+  "París, Francia",
+  "Londres, Reino Unido",
+  "Berlín, Alemania",
+  "Roma, Italia",
+  "Milán, Italia"
+];
+
 const Hero = () => {
   const [searchType, setSearchType] = useState("showrooms");
   const [location, setLocation] = useState("");
   const [style, setStyle] = useState("");
   const [videoLoaded, setVideoLoaded] = useState(false);
+  // Estados para el autocompletado
+  const [filteredLocations, setFilteredLocations] = useState(LOCATIONS);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  
   const videoRef = useRef(null);
+  // Referencias para el autocompletado
+  const autocompleteRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Cerrar sugerencias al hacer clic fuera
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Filtrar ubicaciones basadas en el texto de entrada
+  useEffect(() => {
+    if (location.trim() === "") {
+      // Si no hay texto, mostrar todas las ubicaciones
+      setFilteredLocations(LOCATIONS);
+    } else {
+      // Si hay texto, filtrar las ubicaciones
+      const filtered = LOCATIONS.filter(
+        loc => loc.toLowerCase().includes(location.toLowerCase())
+      );
+      setFilteredLocations(filtered);
+    }
+  }, [location]);
 
   // Manejar la carga del video
   useEffect(() => {
@@ -32,6 +91,33 @@ const Hero = () => {
     }
   }, []);
 
+  // Manejar cambio en el campo de ubicación
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
+    setShowSuggestions(true);
+  };
+
+  // Manejar foco en el campo de ubicación (mostrar todas las ubicaciones)
+  const handleLocationFocus = () => {
+    // Mostrar todas las ubicaciones al recibir el foco
+    setFilteredLocations(LOCATIONS);
+    setShowSuggestions(true);
+  };
+
+  // Seleccionar una ubicación de las sugerencias
+  const handleSelectLocation = (loc) => {
+    setLocation(loc);
+    setShowSuggestions(false);
+    inputRef.current.focus();
+  };
+
+  // Manejar teclado para navegación en sugerencias
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") {
+      setShowSuggestions(false);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     console.log({
@@ -45,8 +131,8 @@ const Hero = () => {
     <section className="relative py-20 md:py-32 overflow-hidden">
       {/* Contenedor de background con imagen/video */}
       <div className="absolute inset-0 z-0">
-        {/* Overlay con gradiente para mejorar contraste */}
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/90 to-neutral-900/80 z-10"></div>
+        {/* Overlay con opacidad equilibrada */}
+        <div className="absolute inset-0 bg-gradient-to-r from-neutral-900/75 to-neutral-800/70 z-10"></div>
         
         {/* Imagen de fondo estática (visible hasta que el video cargue) */}
         <div className={`absolute inset-0 transition-opacity duration-1000 ${videoLoaded ? 'opacity-0' : 'opacity-100'}`}>
@@ -76,14 +162,14 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-md">
             Conectamos marcas con los mejores espacios para brillar
           </h1>
-          <p className="text-xl text-white mb-10 max-w-2xl">
+          <p className="text-xl text-white mb-10 max-w-2xl drop-shadow-md">
             Encuentra el showroom perfecto para tu marca o las marcas ideales para tu espacio. Potencia tu negocio con nuestra plataforma especializada.
           </p>
 
-          {/* Formulario de búsqueda */}
+          {/* Formulario de búsqueda con autocompletado */}
           <div className="bg-white p-6 rounded-xl shadow-lg">
             <form onSubmit={handleSearch} className="space-y-6">
               <div className="md:flex md:items-center md:space-x-4">
@@ -117,15 +203,58 @@ const Hero = () => {
 
                 {/* Campos de búsqueda */}
                 <div className="flex-1 flex flex-col md:flex-row md:items-center md:space-x-3 space-y-4 md:space-y-0">
-                  {/* Campo de ubicación */}
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      placeholder="Ubicación (ciudad, país...)"
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                    />
+                  {/* Campo de ubicación con autocompletado */}
+                  <div className="flex-1 relative" ref={autocompleteRef}>
+                    <div className="relative">
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        placeholder="Ubicación (ciudad, país...)"
+                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-brand-teal-500 focus:border-brand-teal-500"
+                        value={location}
+                        onChange={handleLocationChange}
+                        onFocus={handleLocationFocus}
+                        onKeyDown={handleKeyDown}
+                        autoComplete="off"
+                      />
+                      {/* Icono indicador de que hay un desplegable */}
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg 
+                          className="h-5 w-5 text-gray-400" 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          viewBox="0 0 20 20" 
+                          fill="currentColor" 
+                          aria-hidden="true"
+                        >
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    {/* Lista de sugerencias de autocompletado - ahora muestra inmediatamente al hacer clic */}
+                    {showSuggestions && filteredLocations.length > 0 && (
+                      <ul className="absolute z-10 mt-1 w-full bg-white border border-neutral-200 rounded-md shadow-lg max-h-60 overflow-auto">
+                        {filteredLocations.map((loc, index) => (
+                          <li
+                            key={index}
+                            className="px-4 py-2 hover:bg-brand-beige-100 cursor-pointer text-neutral-700"
+                            onClick={() => handleSelectLocation(loc)}
+                          >
+                            <div className="flex items-center">
+                              <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                className="h-4 w-4 mr-2 text-brand-teal-600" 
+                                viewBox="0 0 20 20" 
+                                fill="currentColor"
+                              >
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              </svg>
+                              {loc}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
 
                   {/* Dropdown de estilos */}
@@ -161,16 +290,16 @@ const Hero = () => {
           {/* Indicadores */}
           <div className="flex flex-wrap gap-x-10 gap-y-4 mt-10 text-white">
             <div className="flex items-center">
-              <div className="text-3xl font-bold mr-2">500+</div>
-              <div className="text-white">Showrooms</div>
+              <div className="text-3xl font-bold mr-2 drop-shadow-md">500+</div>
+              <div className="text-white drop-shadow-md">Showrooms</div>
             </div>
             <div className="flex items-center">
-              <div className="text-3xl font-bold mr-2">1,200+</div>
-              <div className="text-white">Marcas</div>
+              <div className="text-3xl font-bold mr-2 drop-shadow-md">1,200+</div>
+              <div className="text-white drop-shadow-md">Marcas</div>
             </div>
             <div className="flex items-center">
-              <div className="text-3xl font-bold mr-2">30+</div>
-              <div className="text-white">Ciudades</div>
+              <div className="text-3xl font-bold mr-2 drop-shadow-md">30+</div>
+              <div className="text-white drop-shadow-md">Ciudades</div>
             </div>
           </div>
         </div>

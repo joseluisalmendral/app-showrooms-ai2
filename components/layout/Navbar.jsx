@@ -21,27 +21,25 @@ const Navbar = () => {
     <nav className="bg-brand-beige-200 sticky top-0 z-50 border-b-2 border-brand-teal-500">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo y enlaces principales */}
-          <div className="flex items-center">
-            {/* Logo - Aumentado de tamaño */}
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="block">
-                {/* Logo de The Showroom App */}
-                <div className="h-14 flex items-center">
-                  <Image 
-                    src="/images/logo.png" 
-                    alt="The Showroom App" 
-                    width={56} 
-                    height={56} 
-                    className="mr-3"
-                  />
-                  <span className="font-handwritten text-3xl font-bold text-brand-teal-700">The Showroom App</span>
-                </div>
-              </Link>
-            </div>
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/" className="block">
+              <div className="h-14 flex items-center">
+                <Image 
+                  src="/images/logo.png" 
+                  alt="The Showroom App" 
+                  width={56} 
+                  height={56} 
+                  className="mr-3"
+                />
+                <span className="font-handwritten text-3xl font-bold text-brand-teal-700">The Showroom App</span>
+              </div>
+            </Link>
+          </div>
 
-            {/* Enlaces de navegación - Visibles en desktop */}
-            <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
+          {/* Enlaces de navegación centrados - Visibles en desktop */}
+          <div className="hidden sm:flex sm:items-center sm:justify-center flex-1">
+            <div className="flex space-x-10 justify-center">
               {/* Dropdown Marcas */}
               <div className="relative group flex items-center">
                 <button className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors">
@@ -61,8 +59,8 @@ const Navbar = () => {
                   </svg>
                 </button>
 
-                {/* Dropdown content */}
-                <div className="absolute left-0 mt-40 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:mt-2 transition-all duration-300 z-50 border-2 border-brand-teal-500">
+                {/* Dropdown content - Corregido para aparecer debajo del botón */}
+                <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border-2 border-brand-teal-500">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <Link
                       href="/marcas/casual"
@@ -129,8 +127,8 @@ const Navbar = () => {
                   </svg>
                 </button>
 
-                {/* Dropdown content */}
-                <div className="absolute left-0 mt-40 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:mt-2 transition-all duration-300 z-50 border-2 border-brand-teal-500">
+                {/* Dropdown content - Corregido para aparecer debajo del botón */}
+                <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border-2 border-brand-teal-500">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <Link
                       href="/showrooms/filtrar?ubicacion=madrid"

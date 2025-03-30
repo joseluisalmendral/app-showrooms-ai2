@@ -18,39 +18,73 @@ const HowItWorks = () => {
             posible, tanto para marcas como para propietarios de showrooms.
           </p>
 
-          {/* Selector de tabs */}
-          <div className="mt-8 inline-flex border border-neutral-300 rounded-lg p-1 bg-white">
-            <button
-              className={`px-6 py-2 rounded-md text-sm font-medium ${
-                activeTab === "marcas"
-                  ? "bg-primary-500 text-white"
-                  : "text-neutral-700 hover:bg-neutral-100"
+          {/* Selector de tabs mejorado */}
+          <div className="mt-10 inline-flex mx-auto relative max-w-md">
+            {/* Fondo decorativo del selector */}
+            <div className="absolute inset-0 bg-brand-teal-100 rounded-lg"></div>
+            
+            {/* Indicador que se desplaza según la selección */}
+            <div 
+              className={`absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-brand-teal-600 to-brand-teal-700 rounded-lg shadow-md transition-all duration-300 transform ${
+                activeTab === "marcas" ? "translate-x-0" : "translate-x-full"
               }`}
-              onClick={() => setActiveTab("marcas")}
-            >
-              Para Marcas
-            </button>
-            <button
-              className={`px-6 py-2 rounded-md text-sm font-medium ${
-                activeTab === "showrooms"
-                  ? "bg-primary-500 text-white"
-                  : "text-neutral-700 hover:bg-neutral-100"
-              }`}
-              onClick={() => setActiveTab("showrooms")}
-            >
-              Para Showrooms
-            </button>
+            ></div>
+            
+            {/* Botones del selector */}
+            <div className="relative flex w-full">
+              <button
+                className={`flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
+                  activeTab === "marcas"
+                    ? "text-white"
+                    : "text-neutral-700 hover:text-brand-teal-700"
+                }`}
+                onClick={() => setActiveTab("marcas")}
+              >
+                <span className="flex items-center justify-center">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-5 w-5 mr-2" 
+                    viewBox="0 0 20 20" 
+                    fill="currentColor"
+                  >
+                    <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clipRule="evenodd" />
+                    <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
+                  </svg>
+                  Para Marcas
+                </span>
+              </button>
+              <button
+                className={`flex-1 py-3 px-6 rounded-lg text-base font-medium transition-colors z-10 ${
+                  activeTab === "showrooms"
+                    ? "text-white"
+                    : "text-neutral-700 hover:text-brand-teal-700"
+                }`}
+                onClick={() => setActiveTab("showrooms")}
+              >
+                <span className="flex items-center justify-center">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-5 w-5 mr-2" 
+                    viewBox="0 0 20 20" 
+                    fill="currentColor"
+                  >
+                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clipRule="evenodd" />
+                  </svg>
+                  Para Showrooms
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Pasos para Marcas */}
         <div
           className={`grid grid-cols-1 md:grid-cols-3 gap-8 ${
-            activeTab === "marcas" ? "block" : "hidden"
+            activeTab === "marcas" ? "block animate-fade-in" : "hidden"
           }`}
         >
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
+            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -64,14 +98,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Paso 1</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 1</h3>
             <p className="text-neutral-700 mb-4">
               Explora y filtra showrooms según tus necesidades específicas de
               ubicación, tamaño, estilo y presupuesto.
             </p>
             <Link
               href="/showrooms"
-              className="text-primary-600 hover:text-primary-700 font-medium flex items-center"
+              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
             >
               Ver showrooms disponibles
               <svg
@@ -89,8 +123,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
+            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -101,14 +135,14 @@ const HowItWorks = () => {
                 <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Paso 2</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 2</h3>
             <p className="text-neutral-700 mb-4">
               Contacta directamente con los espacios que te interesan y negocia
               los términos que mejor se adapten a tus necesidades.
             </p>
             <Link
               href="/como-funciona#contacto"
-              className="text-primary-600 hover:text-primary-700 font-medium flex items-center"
+              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
             >
               Saber más
               <svg
@@ -126,8 +160,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
+            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -137,14 +171,14 @@ const HowItWorks = () => {
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Paso 3</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 3</h3>
             <p className="text-neutral-700 mb-4">
               Exhibe tus productos y aumenta tu visibilidad. Aprovecha la
               exposición para impulsar tu marca y atraer nuevos clientes.
             </p>
             <Link
               href="/casos-exito"
-              className="text-primary-600 hover:text-primary-700 font-medium flex items-center"
+              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
             >
               Ver casos de éxito
               <svg
@@ -166,11 +200,11 @@ const HowItWorks = () => {
         {/* Pasos para Showrooms */}
         <div
           className={`grid grid-cols-1 md:grid-cols-3 gap-8 ${
-            activeTab === "showrooms" ? "block" : "hidden"
+            activeTab === "showrooms" ? "block animate-fade-in" : "hidden"
           }`}
         >
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
+            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -184,14 +218,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Paso 1</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 1</h3>
             <p className="text-neutral-700 mb-4">
               Crea un perfil detallado de tu espacio, incluyendo fotos de alta
               calidad, características y servicios que ofreces.
             </p>
             <Link
               href="/registro-showroom"
-              className="text-primary-600 hover:text-primary-700 font-medium flex items-center"
+              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
             >
               Registrar mi showroom
               <svg
@@ -209,8 +243,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
+            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -224,14 +258,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Paso 2</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 2</h3>
             <p className="text-neutral-700 mb-4">
               Recibe solicitudes de marcas interesadas en tu espacio y selecciona
               las que mejor se adapten a tu visión y objetivos.
             </p>
             <Link
               href="/como-funciona#solicitudes"
-              className="text-primary-600 hover:text-primary-700 font-medium flex items-center"
+              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
             >
               Saber más
               <svg
@@ -249,8 +283,8 @@ const HowItWorks = () => {
             </Link>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mb-6">
+          <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border-2 border-brand-teal-100 hover:border-brand-teal-300">
+            <div className="w-14 h-14 bg-brand-teal-100 text-brand-teal-600 rounded-full flex items-center justify-center mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"
@@ -264,14 +298,14 @@ const HowItWorks = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold mb-3">Paso 3</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-brand-teal-800">Paso 3</h3>
             <p className="text-neutral-700 mb-4">
               Gestiona tus exhibiciones, optimiza la ocupación de tu espacio y
               genera ingresos constantes con un mínimo esfuerzo.
             </p>
             <Link
               href="/casos-exito?tipo=showroom"
-              className="text-primary-600 hover:text-primary-700 font-medium flex items-center"
+              className="text-brand-teal-600 hover:text-brand-teal-700 font-medium flex items-center"
             >
               Ver casos de éxito
               <svg

@@ -12,7 +12,7 @@ const STATS_DATA = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
+        className="h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -32,7 +32,7 @@ const STATS_DATA = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
+        className="h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -52,7 +52,7 @@ const STATS_DATA = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
+        className="h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -72,7 +72,7 @@ const STATS_DATA = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8"
+        className="h-6 w-6"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -151,23 +151,49 @@ const PlatformStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-16 bg-primary-900 text-white"
+      className="py-16 bg-white border-t border-b border-neutral-200"
     >
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <h2 className="text-center text-3xl md:text-4xl font-bold text-brand-teal-800 mb-14">
+          Datos que respaldan nuestra plataforma
+        </h2>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
           {STATS_DATA.map((stat, index) => (
             <div
               key={stat.id}
-              className="flex flex-col items-center text-center p-6 rounded-lg bg-primary-800/50 backdrop-blur-sm"
+              className="flex flex-col items-center text-center"
             >
-              <div className="text-primary-300 mb-4">{stat.icon}</div>
-              <div className="text-4xl font-bold mb-2">
-                {counters[index]}
-                {stat.suffix}
+              <div className="mb-4 w-14 h-14 bg-brand-teal-50 rounded-full flex items-center justify-center border border-brand-teal-100">
+                <div className="text-brand-teal-600">
+                  {stat.icon}
+                </div>
               </div>
-              <div className="text-primary-100">{stat.label}</div>
+              
+              <div className="mb-2">
+                <span className="text-4xl font-bold text-brand-teal-700">
+                  {counters[index]}
+                </span>
+                <span className="text-2xl font-medium text-brand-teal-700 ml-1">
+                  {stat.suffix}
+                </span>
+              </div>
+              
+              <div className="text-neutral-700 text-lg">
+                {stat.label}
+              </div>
+              
+              {/* Línea decorativa sutil */}
+              <div className="mt-4 w-12 h-1 bg-brand-teal-200 rounded-full"></div>
             </div>
           ))}
+        </div>
+        
+        <div className="mt-16 max-w-3xl mx-auto text-center">
+          <p className="text-neutral-600 leading-relaxed">
+            Estas cifras reflejan el crecimiento y éxito continuo de nuestra plataforma, 
+            garantizando una experiencia fiable y profesional tanto para marcas como para showrooms.
+          </p>
         </div>
       </div>
     </section>
