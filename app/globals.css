@@ -31,7 +31,7 @@ a, button {
 
 /* Estilo base para tarjetas con borde estilo boceto */
 .card {
-  @apply bg-white rounded-lg shadow-md overflow-hidden border-2 border-brand-teal-500 relative;
+  @apply bg-white rounded-lg shadow-md overflow-hidden border-2 border-brand-teal-600 relative;
   background-clip: padding-box;
 }
 
@@ -89,21 +89,21 @@ p {
   @apply text-base leading-relaxed;
 }
 
-/* Estilos de botones inspirados en el logo */
+/* Estilos de botones inspirados en el logo - Mejorados para contraste */
 .btn {
   @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all;
 }
 
 .btn-primary {
-  @apply bg-brand-teal-500 text-white hover:bg-brand-teal-600 focus:ring-brand-teal-500;
+  @apply bg-brand-teal-600 text-white hover:bg-brand-teal-700 focus:ring-brand-teal-500;
 }
 
 .btn-secondary {
-  @apply bg-brand-coral-500 text-white hover:bg-brand-coral-600 focus:ring-brand-coral-500;
+  @apply bg-brand-coral-600 text-white hover:bg-brand-coral-700 focus:ring-brand-coral-500;
 }
 
 .btn-outline {
-  @apply bg-transparent border-2 border-brand-teal-500 text-brand-teal-700 hover:bg-brand-teal-50 focus:ring-brand-teal-500;
+  @apply bg-transparent border-2 border-brand-teal-600 text-brand-teal-700 hover:bg-brand-teal-50 focus:ring-brand-teal-500;
 }
 
 /* Contenedores */
@@ -145,4 +145,45 @@ p {
   display: inline-block;
   vertical-align: middle;
   margin-right: 0.5em;
+}
+
+/* Estilos específicos para mejorar accesibilidad y contraste */
+.text-muted {
+  @apply text-neutral-700;
+}
+
+.text-light-muted {
+  @apply text-neutral-600;
+}
+
+.text-primary {
+  @apply text-brand-teal-700;
+}
+
+.text-secondary {
+  @apply text-brand-coral-700;
+}
+
+/* Mejoras para elementos form */
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  print-color-adjust: exact;
+}
+
+/* Mejoras de accesibilidad para focos */
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+  @apply outline-none ring-2 ring-brand-teal-500 ring-offset-2;
+}
+
+/* Evitar que el texto sea demasiado claro */
+.text-neutral-400 {
+  @apply text-neutral-500;
+}
+
+.text-white\/80, .text-white\/70, .text-white\/60 {
+  @apply text-white;
 }

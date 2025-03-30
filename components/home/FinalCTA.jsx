@@ -4,35 +4,35 @@ import Link from "next/link";
 
 const FinalCTA = () => {
   return (
-    <section className="py-20 bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+    <section className="py-20 bg-gradient-to-r from-brand-teal-700 to-brand-teal-900 text-white">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
           ¿Listo para potenciar tu marca o espacio?
         </h2>
-        <p className="text-lg text-white/90 mb-10 max-w-2xl mx-auto">
+        <p className="text-lg text-white mb-10 max-w-2xl mx-auto">
           Únete a nuestra comunidad de marcas y showrooms innovadores. Descubre nuevas oportunidades, amplía tu red y lleva tu negocio al siguiente nivel.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/registro?tipo=marca"
-            className="btn py-3 px-8 bg-white text-primary-700 hover:bg-neutral-100 font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
+            className="btn py-3 px-8 bg-white text-brand-teal-800 hover:bg-neutral-100 font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
           >
             Soy una marca
           </Link>
           <Link
             href="/registro?tipo=showroom"
-            className="btn py-3 px-8 bg-primary-700 text-white border border-white hover:bg-primary-800 font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
+            className="btn py-3 px-8 bg-brand-coral-600 text-white border border-white hover:bg-brand-coral-700 font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
           >
             Tengo un showroom
           </Link>
         </div>
         
-        <div className="mt-10 text-white/70 flex justify-center items-center space-x-4">
+        <div className="mt-10 text-white flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-6">
           <div className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-1"
+              className="h-5 w-5 mr-2"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -47,7 +47,7 @@ const FinalCTA = () => {
           <div className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-1"
+              className="h-5 w-5 mr-2"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -62,7 +62,7 @@ const FinalCTA = () => {
           <div className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-1"
+              className="h-5 w-5 mr-2"
               viewBox="0 0 20 20"
               fill="currentColor"
             >

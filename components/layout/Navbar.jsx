@@ -20,31 +20,31 @@ const Navbar = () => {
   return (
     <nav className="bg-brand-beige-200 sticky top-0 z-50 border-b-2 border-brand-teal-500">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo y enlaces principales */}
-          <div className="flex">
-            {/* Logo */}
+          <div className="flex items-center">
+            {/* Logo - Aumentado de tamaño */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="block">
                 {/* Logo de The Showroom App */}
-                <div className="h-10 w-auto flex items-center">
+                <div className="h-14 flex items-center">
                   <Image 
                     src="/images/logo.png" 
                     alt="The Showroom App" 
-                    width={40} 
-                    height={40} 
-                    className="mr-2"
+                    width={56} 
+                    height={56} 
+                    className="mr-3"
                   />
-                  <span className="font-handwritten text-2xl font-bold">The Showroom App</span>
+                  <span className="font-handwritten text-3xl font-bold text-brand-teal-700">The Showroom App</span>
                 </div>
               </Link>
             </div>
 
             {/* Enlaces de navegación - Visibles en desktop */}
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
               {/* Dropdown Marcas */}
-              <div className="relative group">
-                <button className="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-900 hover:text-brand-teal-600">
+              <div className="relative group flex items-center">
+                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors">
                   Marcas
                   <svg
                     className="ml-1 h-4 w-4"
@@ -62,7 +62,7 @@ const Navbar = () => {
                 </button>
 
                 {/* Dropdown content */}
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border-2 border-brand-teal-500">
+                <div className="absolute left-0 mt-40 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:mt-2 transition-all duration-300 z-50 border-2 border-brand-teal-500">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <Link
                       href="/marcas/casual"
@@ -111,8 +111,8 @@ const Navbar = () => {
               </div>
 
               {/* Dropdown Showrooms */}
-              <div className="relative group">
-                <button className="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-900 hover:text-brand-teal-600">
+              <div className="relative group flex items-center">
+                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors">
                   Showrooms
                   <svg
                     className="ml-1 h-4 w-4"
@@ -130,7 +130,7 @@ const Navbar = () => {
                 </button>
 
                 {/* Dropdown content */}
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border-2 border-brand-teal-500">
+                <div className="absolute left-0 mt-40 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:mt-2 transition-all duration-300 z-50 border-2 border-brand-teal-500">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     <Link
                       href="/showrooms/filtrar?ubicacion=madrid"
@@ -174,7 +174,7 @@ const Navbar = () => {
               {/* Enlace Cómo Funciona */}
               <Link
                 href="/como-funciona"
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-900 hover:text-brand-teal-600"
+                className="inline-flex items-center px-2 py-2 text-base font-medium text-neutral-900 hover:text-brand-teal-700 transition-colors"
               >
                 Cómo funciona
               </Link>
@@ -182,10 +182,10 @@ const Navbar = () => {
           </div>
 
           {/* Botón de autenticación */}
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="hidden sm:flex sm:items-center">
             <button
               onClick={toggleLoginModal}
-              className="btn btn-primary"
+              className="btn btn-primary text-white shadow-md hover:shadow-lg"
             >
               Iniciar sesión / Registrarse
             </button>
@@ -195,7 +195,7 @@ const Navbar = () => {
           <div className="flex items-center sm:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-neutral-500 hover:text-neutral-900 hover:bg-brand-beige-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-teal-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-neutral-700 hover:text-brand-teal-700 hover:bg-brand-beige-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-teal-500"
             >
               <span className="sr-only">Abrir menú principal</span>
               {/* Icono menú hamburguesa */}
@@ -291,7 +291,7 @@ const Navbar = () => {
             </button>
 
             {/* Título del modal */}
-            <h2 className="text-2xl font-bold text-center mb-6 font-handwritten">
+            <h2 className="text-3xl font-bold text-center mb-6 font-handwritten text-brand-teal-700">
               Iniciar sesión / Registrarse
             </h2>
 
@@ -300,7 +300,7 @@ const Navbar = () => {
               <button
                 className={`flex-1 py-2 text-center ${
                   userType === "marca"
-                    ? "bg-brand-teal-500 text-white"
+                    ? "bg-brand-teal-600 text-white"
                     : "bg-white text-neutral-700 hover:bg-brand-beige-100"
                 }`}
                 onClick={() => setUserType("marca")}
@@ -310,7 +310,7 @@ const Navbar = () => {
               <button
                 className={`flex-1 py-2 text-center ${
                   userType === "showroom"
-                    ? "bg-brand-teal-500 text-white"
+                    ? "bg-brand-teal-600 text-white"
                     : "bg-white text-neutral-700 hover:bg-brand-beige-100"
                 }`}
                 onClick={() => setUserType("showroom")}
@@ -378,7 +378,7 @@ const Navbar = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full btn btn-primary py-2 px-4"
+                  className="w-full btn btn-primary py-2 px-4 text-white bg-brand-teal-600 hover:bg-brand-teal-700"
                 >
                   Iniciar sesión
                 </button>
@@ -394,7 +394,6 @@ const Navbar = () => {
                   <svg
                     className="w-5 h-5 mr-2"
                     viewBox="0 0 24 24"
-                    fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
