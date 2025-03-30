@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,9 +5,9 @@
 :root {
   --background: #f7f7f7; /* seasalt */
   --foreground: #0d0d0d; /* night */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-handwritten: 'Caveat', cursive;
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-heading: var(--font-montserrat);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -46,31 +45,31 @@ html {
 
 /* Estilos de tipografía */
 h1, .h1 {
-  @apply text-4xl font-bold tracking-tight md:text-5xl font-handwritten;
+  @apply text-4xl font-bold tracking-tight md:text-5xl font-heading;
 }
 
 h2, .h2 {
-  @apply text-3xl font-semibold tracking-tight md:text-4xl font-handwritten;
+  @apply text-3xl font-semibold tracking-tight md:text-4xl font-heading;
 }
 
 h3, .h3 {
-  @apply text-2xl font-semibold md:text-3xl font-handwritten;
+  @apply text-2xl font-semibold md:text-3xl font-heading;
 }
 
 h4, .h4 {
-  @apply text-xl font-semibold md:text-2xl font-handwritten;
+  @apply text-xl font-semibold md:text-2xl font-heading;
 }
 
 h5, .h5 {
-  @apply text-lg font-semibold md:text-xl;
+  @apply text-lg font-semibold md:text-xl font-heading;
 }
 
 h6, .h6 {
-  @apply text-base font-semibold md:text-lg;
+  @apply text-base font-semibold md:text-lg font-heading;
 }
 
 p {
-  @apply text-base leading-relaxed;
+  @apply text-base leading-relaxed font-body;
 }
 
 /* Estilos de botones modernos */

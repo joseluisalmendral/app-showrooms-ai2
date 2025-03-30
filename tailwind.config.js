@@ -49,12 +49,13 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-geist-mono)', 'monospace'],
-        // Mantener fuentes con estilo manuscrito para títulos, para complementar el diseño
-        handwritten: ['Caveat', 'Indie Flower', 'cursive'],
-        heading: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
-        body: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        // Nuevas configuraciones de fuentes más profesionales y minimalistas
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-ibm-plex-mono)', 'monospace'],
+        heading: ['var(--font-montserrat)', 'system-ui', 'sans-serif'],
+        body: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        // Mantener opción para títulos decorativos para casos específicos
+        display: ['var(--font-montserrat)', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         'sm': '0.125rem',
