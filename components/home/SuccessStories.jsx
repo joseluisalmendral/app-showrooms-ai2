@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useRef } from "react";
 import Link from "next/link";
 
 // Datos de ejemplo para los casos de éxito
@@ -51,40 +50,10 @@ const SUCCESS_STORIES = [
 ];
 
 const SuccessStories = () => {
-  const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef(null);
 
-  // Parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setScrollY(window.scrollY * 0.05);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   return (
-    <section className="py-20 relative bg-gradient-to-b from-white to-brand-celeste-50" ref={sectionRef}>
-      {/* Elementos decorativos con parallax */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-brand-mauve-200 opacity-20 blur-3xl"
-          style={{ transform: `translateY(${scrollY * 1.2}px)` }}
-        ></div>
-        <div 
-          className="absolute -bottom-40 -left-20 w-96 h-96 rounded-full bg-brand-celeste-200 opacity-20 blur-3xl"
-          style={{ transform: `translateY(${-scrollY * 0.8}px)` }}
-        ></div>
-      </div>
-
+    <section className="py-20 relative bg-brand-neutral-50" ref={sectionRef}>
       <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-6 text-center">
           Historias de éxito
@@ -106,7 +75,7 @@ const SuccessStories = () => {
                     <div className="absolute inset-0 flex items-center justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className={`h-8 w-8 ${story.type === "marca" ? "text-brand-mauve-400" : "text-brand-celeste-400"}`}
+                        className={`h-8 w-8 ${story.type === "marca" ? "text-brand-mauve-400" : "text-brand-neutral-400"}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -154,7 +123,7 @@ const SuccessStories = () => {
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         story.type === "marca" 
                           ? "bg-brand-mauve-100 text-brand-mauve-800" 
-                          : "bg-brand-celeste-100 text-brand-celeste-800"
+                          : "bg-brand-neutral-200 text-brand-neutral-800"
                       }`}
                       >
                         {story.type === "marca" ? "Marca" : "Showroom"}

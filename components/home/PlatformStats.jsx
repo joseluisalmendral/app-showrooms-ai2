@@ -86,24 +86,6 @@ const PlatformStats = () => {
   const [counters, setCounters] = useState(STATS_DATA.map(() => 0));
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef(null);
-  const [scrollY, setScrollY] = useState(0);
-
-  // Parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setScrollY(window.scrollY * 0.05);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   // Función para animar contadores
   const animateValue = (start, end, duration, index) => {
@@ -169,20 +151,8 @@ const PlatformStats = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-16 relative bg-gradient-to-b from-brand-celeste-50 to-white"
+      className="py-16 bg-brand-neutral-50"
     >
-      {/* Elementos decorativos de parallax */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute -top-20 right-10 w-72 h-72 rounded-full bg-brand-celeste-200 opacity-20 blur-3xl"
-          style={{ transform: `translateY(${scrollY * 1.5}px)` }}
-        ></div>
-        <div 
-          className="absolute bottom-10 left-10 w-64 h-64 rounded-full bg-brand-mauve-200 opacity-20 blur-3xl"
-          style={{ transform: `translateY(${-scrollY * 1.2}px)` }}
-        ></div>
-      </div>
-      
       <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-center text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-14">
           Datos que respaldan nuestra plataforma
@@ -194,17 +164,17 @@ const PlatformStats = () => {
               key={stat.id}
               className="flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300"
             >
-              <div className="mb-4 w-16 h-16 bg-brand-mauve-50 rounded-full flex items-center justify-center border border-brand-mauve-100 shadow-sm">
-                <div className="text-brand-mauve-600">
+              <div className="mb-4 w-16 h-16 bg-white rounded-full flex items-center justify-center border border-brand-neutral-200 shadow-sm">
+                <div className="text-brand-neutral-600">
                   {stat.icon}
                 </div>
               </div>
               
               <div className="mb-2">
-                <span className="text-4xl font-bold text-brand-mauve-600">
+                <span className="text-4xl font-bold text-brand-neutral-900">
                   {counters[index]}
                 </span>
-                <span className="text-2xl font-medium text-brand-mauve-600 ml-1">
+                <span className="text-2xl font-medium text-brand-neutral-700 ml-1">
                   {stat.suffix}
                 </span>
               </div>
@@ -213,8 +183,8 @@ const PlatformStats = () => {
                 {stat.label}
               </div>
               
-              {/* Línea decorativa con gradiente */}
-              <div className="mt-4 w-16 h-1 rounded-full bg-gradient-to-r from-brand-mauve-300 to-brand-celeste-300"></div>
+              {/* Línea decorativa simplificada */}
+              <div className="mt-4 w-16 h-1 rounded-full bg-brand-neutral-300"></div>
             </div>
           ))}
         </div>

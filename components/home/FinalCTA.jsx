@@ -1,99 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 
 const FinalCTA = () => {
-  const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  // Parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setScrollY(window.scrollY * 0.08);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // Mouse movement effect
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        if (
-          e.clientX >= rect.left &&
-          e.clientX <= rect.right &&
-          e.clientY >= rect.top &&
-          e.clientY <= rect.bottom
-        ) {
-          // Normalize coordinates to be between -1 and 1
-          const x = (e.clientX - rect.left) / rect.width * 2 - 1;
-          const y = (e.clientY - rect.top) / rect.height * 2 - 1;
-          setMousePosition({ x, y });
-        }
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
 
   return (
     <section 
       ref={sectionRef}
-      className="py-20 relative overflow-hidden"
+      className="py-20 relative overflow-hidden bg-brand-mauve-700"
     >
-      {/* Fondo con gradiente mejorado */}
-      <div className="absolute inset-0 bg-gradient-to-r from-brand-mauve-600 to-brand-mauve-800"></div>
-      
-      {/* Elementos decorativos de fondo con efecto parallax */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none">
-        <div 
-          className="absolute top-10 left-10 w-32 h-32 bg-brand-celeste-300 rounded-full filter blur-xl"
-          style={{ 
-            transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px) translateY(${-scrollY * 0.5}px)` 
-          }}
-        ></div>
-        <div 
-          className="absolute bottom-10 right-10 w-40 h-40 bg-brand-mauve-400 rounded-full filter blur-xl"
-          style={{ 
-            transform: `translate(${-mousePosition.x * 30}px, ${-mousePosition.y * 30}px) translateY(${scrollY * 0.7}px)` 
-          }}
-        ></div>
-        <div 
-          className="absolute top-1/2 left-1/3 w-24 h-24 bg-brand-celeste-200 rounded-full filter blur-lg"
-          style={{ 
-            transform: `translate(${mousePosition.x * 15}px, ${mousePosition.y * 15}px) translateY(${-scrollY * 0.3}px)` 
-          }}
-        ></div>
-        
-        {/* Patrones y formas adicionales */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-full h-full bg-grid-pattern"></div>
-        </div>
-        
-        {/* Líneas decorativas */}
-        <div 
-          className="absolute left-0 right-0 top-20 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-20"
-          style={{ transform: `translateY(${scrollY * 0.2}px)` }}
-        ></div>
-        <div 
-          className="absolute left-0 right-0 bottom-20 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-20"
-          style={{ transform: `translateY(${-scrollY * 0.2}px)` }}
-        ></div>
-      </div>
+      {/* Fondo simplificado sin exceso de elementos decorativos */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
       
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-3xl mx-auto">
@@ -113,14 +32,14 @@ const FinalCTA = () => {
             </Link>
             <Link
               href="/registro?tipo=showroom"
-              className="btn py-3 px-8 bg-brand-celeste-300 text-brand-neutral-900 hover:bg-brand-celeste-400 font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+              className="btn py-3 px-8 bg-brand-neutral-100 text-brand-neutral-900 hover:bg-brand-neutral-200 font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
             >
               Tengo un showroom
             </Link>
           </div>
           
           <div className="mt-10 text-white flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-6">
-            <div className="flex items-center bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
+            <div className="flex items-center bg-white/10 rounded-full px-4 py-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"
@@ -135,7 +54,7 @@ const FinalCTA = () => {
               </svg>
               <span>Registro gratuito</span>
             </div>
-            <div className="flex items-center bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
+            <div className="flex items-center bg-white/10 rounded-full px-4 py-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"
@@ -150,7 +69,7 @@ const FinalCTA = () => {
               </svg>
               <span>Sin comisiones ocultas</span>
             </div>
-            <div className="flex items-center bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
+            <div className="flex items-center bg-white/10 rounded-full px-4 py-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"

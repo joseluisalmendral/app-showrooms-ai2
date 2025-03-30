@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 // Datos de ejemplo para el autocompletado de ubicaciones
 const LOCATIONS = [
@@ -40,6 +41,7 @@ const Hero = () => {
   // Referencias para el autocompletado
   const autocompleteRef = useRef(null);
   const inputRef = useRef(null);
+  const howItWorksRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
 
   // Cerrar sugerencias al hacer clic fuera
@@ -140,12 +142,22 @@ const Hero = () => {
     });
   };
 
+  // Función para scroll a la sección "Cómo funciona"
+  const scrollToHowItWorks = () => {
+    // Obtener el elemento con ID "como-funciona"
+    const howItWorksSection = document.getElementById("como-funciona");
+    
+    if (howItWorksSection) {
+      howItWorksSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <section className="relative min-h-[calc(100vh-5rem)] flex items-center py-10 overflow-hidden">
+    <section className="relative min-h-screen flex items-center pt-20 pb-10 overflow-hidden">
       {/* Contenedor de background con imagen/video */}
       <div className="absolute inset-0 z-0">
         {/* Overlay con opacidad equilibrada y gradiente moderno */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-neutral-950/70 via-brand-neutral-900/60 to-brand-mauve-900/60 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-neutral-950/80 via-brand-neutral-900/60 to-brand-neutral-950/70 z-10"></div>
         
         {/* Imagen de fondo estática (visible hasta que el video cargue) con efecto parallax */}
         <div 
@@ -191,7 +203,7 @@ const Hero = () => {
           </p>
 
           {/* Formulario de búsqueda con autocompletado - Diseño moderno */}
-          <div className="bg-white p-6 rounded-xl shadow-xl backdrop-blur-sm bg-opacity-95">
+          <div className="bg-white/95 p-6 rounded-xl shadow-xl backdrop-blur-sm">
             <form onSubmit={handleSearch} className="space-y-6">
               <div className="md:flex md:items-center md:space-x-4">
                 {/* Selector tipo radio con diseño moderno */}
@@ -324,6 +336,26 @@ const Hero = () => {
             </div>
           </div>
         </div>
+      </div>
+      
+      {/* Botón "Descubrir más" */}
+      <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center z-10">
+        <button 
+          onClick={scrollToHowItWorks}
+          className="text-white flex flex-col items-center transition-transform hover:translate-y-1 animate-bounce"
+          aria-label="Descubrir más"
+        >
+          <span className="mb-2 text-sm font-medium">Descubrir más</span>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-8 w-8" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </button>
       </div>
     </section>
   );

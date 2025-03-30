@@ -128,14 +128,14 @@ const FeaturedShowrooms = () => {
     setCurrentIndex(index);
   };
 
-  // Autoplay - ajustado a 3000ms (3 segundos) para ser más rápido
+  // Autoplay - ajustado a 2000ms (2 segundos) para ser más rápido
   useEffect(() => {
     let intervalId;
 
     if (!isPaused && !isHovering && !hasInteracted) {
       intervalId = setInterval(() => {
         nextSlide();
-      }, 3000); // Cambia cada 3 segundos (antes era 5 segundos)
+      }, 2000); // Cambia cada 2 segundos (antes era 3 segundos)
     }
 
     return () => {
@@ -143,14 +143,14 @@ const FeaturedShowrooms = () => {
     };
   }, [isPaused, isHovering, hasInteracted, nextSlide]);
 
-  // Reset hasInteracted después de un tiempo de inactividad - reducido a 6 segundos
+  // Reset hasInteracted después de un tiempo de inactividad - reducido a 5 segundos
   useEffect(() => {
     let timeoutId;
     
     if (hasInteracted) {
       timeoutId = setTimeout(() => {
         setHasInteracted(false);
-      }, 6000); // Vuelve a autoplay después de 6 segundos de inactividad (antes 8)
+      }, 5000); // Vuelve a autoplay después de 5 segundos de inactividad (antes 6)
     }
     
     return () => {
@@ -192,7 +192,7 @@ const FeaturedShowrooms = () => {
   }, [nextSlide, prevSlide]);
 
   return (
-    <section className="py-20 bg-gradient-to-b from-brand-celeste-50 to-white overflow-hidden">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900">
@@ -302,7 +302,7 @@ const FeaturedShowrooms = () => {
             aria-roledescription="carrusel"
           >
             <div 
-              className={`flex transition-transform duration-300 ease-in-out ${animation ? '' : 'transition-none'}`}
+              className={`flex transition-transform duration-500 ease-in-out ${animation ? '' : 'transition-none'}`}
               style={{ transform: `translateX(-${currentIndex * (100 / cardsInView)}%)` }}
             >
               {SHOWROOMS_DATA.map((showroom, index) => (

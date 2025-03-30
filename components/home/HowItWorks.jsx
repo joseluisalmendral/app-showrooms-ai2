@@ -7,7 +7,7 @@ const HowItWorks = () => {
   const [activeTab, setActiveTab] = useState("marcas"); // "marcas" o "showrooms"
 
   return (
-    <section className="py-20 bg-brand-mauve-50" id="como-funciona">
+    <section className="py-20 bg-white" id="como-funciona">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-6">

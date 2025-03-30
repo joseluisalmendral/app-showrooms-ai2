@@ -84,7 +84,6 @@ const FeaturedBrands = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [brandsPerPage, setBrandsPerPage] = useState(4);
   const [animation, setAnimation] = useState(true);
-  const [scrollY, setScrollY] = useState(0);
   
   const carouselRef = useRef(null);
 
@@ -95,23 +94,6 @@ const FeaturedBrands = () => {
 
   // Determinar el número de páginas del carrusel
   const totalPages = Math.ceil(filteredBrands.length / brandsPerPage);
-
-  // Parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (carouselRef.current) {
-        const rect = carouselRef.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setScrollY(window.scrollY * 0.05);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   // Ajustar el número de marcas por página según el tamaño de la pantalla
   useEffect(() => {
@@ -159,14 +141,14 @@ const FeaturedBrands = () => {
     setCurrentPage(0);
   }, [activeCategory]);
 
-  // Autoplay - tiempo reducido a 3 segundos para mayor rapidez
+  // Autoplay - tiempo reducido a 2 segundos para mayor rapidez
   useEffect(() => {
     let intervalId;
 
     if (!isPaused && !isHovering && !hasInteracted && totalPages > 1) {
       intervalId = setInterval(() => {
         nextPage();
-      }, 3000); // Cambiar cada 3 segundos (antes era 6 segundos)
+      }, 2000); // Cambiar cada 2 segundos (antes era 3 segundos)
     }
 
     return () => {
@@ -174,14 +156,14 @@ const FeaturedBrands = () => {
     };
   }, [isPaused, isHovering, hasInteracted, nextPage, totalPages]);
 
-  // Reset hasInteracted después de un tiempo de inactividad - reducido a 6 segundos
+  // Reset hasInteracted después de un tiempo de inactividad - reducido a 5 segundos
   useEffect(() => {
     let timeoutId;
     
     if (hasInteracted) {
       timeoutId = setTimeout(() => {
         setHasInteracted(false);
-      }, 6000); // Vuelve a autoplay después de 6 segundos (antes 8 segundos)
+      }, 5000); // Vuelve a autoplay después de 5 segundos (antes 6 segundos)
     }
     
     return () => {
@@ -196,16 +178,7 @@ const FeaturedBrands = () => {
   );
 
   return (
-    <section className="py-20 relative bg-gradient-to-b from-brand-mauve-50 to-white" ref={carouselRef}>
-      {/* Elementos de parallax background */}
-      <div 
-        className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none z-0"
-        style={{ transform: `translateY(${scrollY}px)` }}
-      >
-        <div className="absolute -top-20 right-20 w-80 h-80 rounded-full bg-brand-mauve-300 filter blur-3xl"></div>
-        <div className="absolute bottom-20 -left-20 w-80 h-80 rounded-full bg-brand-celeste-300 filter blur-3xl"></div>
-      </div>
-      
+    <section className="py-20 relative bg-brand-neutral-50">
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900">
@@ -217,7 +190,7 @@ const FeaturedBrands = () => {
             <div className="hidden md:flex items-center space-x-2">
               <button
                 onClick={() => setIsPaused(!isPaused)}
-                className="w-10 h-10 rounded-full bg-brand-teal-50 border border-brand-teal-200 hover:bg-brand-teal-100 transition-colors flex items-center justify-center text-brand-teal-700"
+                className="w-10 h-10 rounded-full bg-brand-neutral-100 border border-brand-neutral-200 hover:bg-brand-neutral-200 transition-colors flex items-center justify-center text-brand-neutral-700"
                 aria-label={isPaused ? "Reanudar presentación automática" : "Pausar presentación automática"}
               >
                 {isPaused ? (
@@ -260,7 +233,7 @@ const FeaturedBrands = () => {
               </button>
               <button
                 onClick={prevPage}
-                className="w-10 h-10 rounded-full bg-brand-teal-50 border border-brand-teal-200 hover:bg-brand-teal-100 transition-colors flex items-center justify-center text-brand-teal-700"
+                className="w-10 h-10 rounded-full bg-brand-neutral-100 border border-brand-neutral-200 hover:bg-brand-neutral-200 transition-colors flex items-center justify-center text-brand-neutral-700"
                 aria-label="Ver marcas anteriores"
                 disabled={totalPages <= 1}
               >
@@ -281,7 +254,7 @@ const FeaturedBrands = () => {
               </button>
               <button
                 onClick={nextPage}
-                className="w-10 h-10 rounded-full bg-brand-teal-50 border border-brand-teal-200 hover:bg-brand-teal-100 transition-colors flex items-center justify-center text-brand-teal-700"
+                className="w-10 h-10 rounded-full bg-brand-neutral-100 border border-brand-neutral-200 hover:bg-brand-neutral-200 transition-colors flex items-center justify-center text-brand-neutral-700"
                 aria-label="Ver siguientes marcas"
                 disabled={totalPages <= 1}
               >
@@ -312,7 +285,7 @@ const FeaturedBrands = () => {
                 key={category}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
                   activeCategory === category
-                    ? "bg-brand-teal-600 text-white"
+                    ? "bg-brand-neutral-800 text-white"
                     : "text-neutral-600 hover:bg-neutral-100"
                 }`}
                 onClick={() => setActiveCategory(category)}
@@ -350,7 +323,7 @@ const FeaturedBrands = () => {
           ) : (
             <>
               <div 
-                className={`flex transition-transform duration-300 ease-in-out ${animation ? '' : 'transition-none'}`}
+                className={`flex transition-transform duration-700 ease-in-out ${animation ? '' : 'transition-none'}`}
                 style={{ transform: `translateX(-${currentPage * 100}%)` }}
                 role="region"
                 aria-roledescription="carousel"
@@ -375,9 +348,9 @@ const FeaturedBrands = () => {
                           href={`/marcas/${brand.slug}`}
                           className="group block"
                         >
-                          <div className="bg-white rounded-lg p-6 border border-neutral-200 hover:border-brand-teal-500 hover:shadow-md transition-all h-full flex flex-col items-center justify-center text-center">
+                          <div className="bg-white rounded-lg p-6 border border-neutral-200 hover:border-brand-neutral-400 hover:shadow-md transition-all h-full flex flex-col items-center justify-center text-center">
                             <div className="mb-4 relative">
-                              <div className="w-24 h-24 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center group-hover:ring-4 ring-brand-teal-100 transition-all">
+                              <div className="w-24 h-24 bg-neutral-100 rounded-full overflow-hidden flex items-center justify-center group-hover:ring-4 ring-brand-neutral-100 transition-all">
                                 <PlaceholderImage
                                   src={brand.logo}
                                   alt={brand.name}
@@ -387,11 +360,11 @@ const FeaturedBrands = () => {
                                   placeholderType="brand"
                                 />
                               </div>
-                              <div className="absolute -bottom-2 -right-2 bg-brand-teal-50 text-brand-teal-800 text-xs font-medium py-1 px-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border border-brand-teal-200">
+                              <div className="absolute -bottom-2 -right-2 bg-brand-neutral-100 text-brand-neutral-800 text-xs font-medium py-1 px-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity border border-brand-neutral-200">
                                 Desde {brand.since}
                               </div>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2 group-hover:text-brand-teal-600 transition-colors">
+                            <h3 className="text-xl font-semibold mb-2 group-hover:text-brand-neutral-700 transition-colors">
                               {brand.name}
                             </h3>
                             <div className="flex flex-wrap justify-center gap-2 mt-auto">
@@ -420,7 +393,7 @@ const FeaturedBrands = () => {
                       onClick={() => goToPage(index)}
                       className={`w-3 h-3 rounded-full transition-all ${
                         currentPage === index
-                          ? "bg-brand-teal-600 w-6"
+                          ? "bg-brand-neutral-700 w-6"
                           : "bg-neutral-300 hover:bg-neutral-400"
                       }`}
                       aria-label={`Ir a página ${index + 1}`}
@@ -472,7 +445,7 @@ const FeaturedBrands = () => {
         <div className="mt-10 text-center">
           <Link
             href="/marcas"
-            className="btn btn-outline py-2 px-6 hover:bg-brand-teal-50"
+            className="btn btn-outline py-2 px-6 hover:bg-brand-neutral-100"
           >
             Descubre más marcas
           </Link>

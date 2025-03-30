@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <>
+    <main className="overflow-hidden">
       {/* Sección Hero */}
       <Hero />
 
@@ -43,6 +43,6 @@ export default function Home() {
 
       {/* Sección Llamada a la Acción Final */}
       <FinalCTA />
-    </>
+    </main>
   );
 }

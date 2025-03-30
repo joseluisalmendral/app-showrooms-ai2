@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -41,7 +41,7 @@ const BLOG_POSTS = [
 // Mapa de colores para categorías - actualizado con la nueva paleta
 const CATEGORY_COLORS = {
   "Tendencias": "bg-brand-mauve-100 text-brand-mauve-800",
-  "Consejos": "bg-brand-celeste-100 text-brand-celeste-800",
+  "Consejos": "bg-brand-neutral-100 text-brand-neutral-800",
   "Eventos": "bg-yellow-100 text-yellow-800",
   "Industria": "bg-emerald-100 text-emerald-800",
   "Entrevistas": "bg-indigo-100 text-indigo-800"
@@ -49,46 +49,9 @@ const CATEGORY_COLORS = {
 
 const BlogPreview = () => {
   const sectionRef = useRef(null);
-  const [scrollY, setScrollY] = useState(0);
-
-  // Parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setScrollY(window.scrollY * 0.03);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   return (
-    <section className="py-20 relative" ref={sectionRef}>
-      {/* Fondo con gradiente y efectos */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white to-brand-mauve-50"></div>
-
-      {/* Elementos decorativos con parallax */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute top-40 -right-20 w-80 h-80 rounded-full bg-brand-mauve-200 opacity-30 blur-3xl"
-          style={{ transform: `translateY(${scrollY * 1.5}px)` }}
-        ></div>
-        <div 
-          className="absolute -bottom-40 left-1/4 w-96 h-96 rounded-full bg-brand-celeste-200 opacity-20 blur-3xl"
-          style={{ transform: `translateY(${-scrollY * 0.8}px)` }}
-        ></div>
-        <div 
-          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-yellow-200 opacity-10 blur-xl"
-          style={{ transform: `translateY(${scrollY * 1.2}px) translateX(${scrollY * 0.5}px)` }}
-        ></div>
-      </div>
-      
+    <section className="py-20 relative bg-white" ref={sectionRef}>
       <div className="container mx-auto px-4 relative z-10">
         <h2 className="text-3xl md:text-4xl font-bold text-brand-neutral-900 mb-4 text-center">
           Tendencias y novedades
@@ -194,7 +157,7 @@ const BlogPreview = () => {
         <div className="mt-10 text-center">
           <Link
             href="/blog"
-            className="btn btn-outline py-2 px-6 hover:bg-brand-mauve-50 transform transition-transform hover:scale-105 duration-300"
+            className="btn btn-outline py-2 px-6 hover:bg-brand-neutral-50 transform transition-transform hover:scale-105 duration-300"
           >
             Visitar el blog
           </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,6 +8,22 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [userType, setUserType] = useState("marca"); // "marca" o "showroom"
+  const [scrolled, setScrolled] = useState(false);
+
+  // Detectar scroll para cambiar el estilo del navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrolled]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -18,21 +34,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white sticky top-0 z-50 shadow-sm border-b border-brand-neutral-100">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      scrolled 
+        ? "bg-white shadow-sm border-b border-brand-neutral-100" 
+        : "bg-transparent"
+    }`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="block">
               <div className="h-14 flex items-center">
-                {/* <Image 
-                  src="/images/logo.png" 
-                  alt="The Showroom App" 
-                  width={56} 
-                  height={56} 
-                  className="mr-3"
-                /> */}
-                <span className="font-handwritten text-3xl font-bold text-brand-mauve-700">The Showroom App</span>
+                <span className={`font-handwritten text-3xl font-bold ${
+                  scrolled ? "text-brand-mauve-700" : "text-white"
+                } transition-colors duration-300`}>
+                  The Showroom App
+                </span>
               </div>
             </Link>
           </div>
@@ -42,7 +59,11 @@ const Navbar = () => {
             <div className="flex space-x-10 justify-center">
               {/* Dropdown Marcas */}
               <div className="relative group flex items-center">
-                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-brand-neutral-800 hover:text-brand-mauve-600 transition-colors">
+                <button className={`inline-flex items-center px-2 py-2 text-base font-medium ${
+                  scrolled 
+                    ? "text-brand-neutral-800 hover:text-brand-mauve-600" 
+                    : "text-white hover:text-brand-neutral-200"
+                } transition-colors`}>
                   Marcas
                   <svg
                     className="ml-1 h-4 w-4"
@@ -110,7 +131,11 @@ const Navbar = () => {
 
               {/* Dropdown Showrooms */}
               <div className="relative group flex items-center">
-                <button className="inline-flex items-center px-2 py-2 text-base font-medium text-brand-neutral-800 hover:text-brand-mauve-600 transition-colors">
+                <button className={`inline-flex items-center px-2 py-2 text-base font-medium ${
+                  scrolled 
+                    ? "text-brand-neutral-800 hover:text-brand-mauve-600" 
+                    : "text-white hover:text-brand-neutral-200"
+                } transition-colors`}>
                   Showrooms
                   <svg
                     className="ml-1 h-4 w-4"
@@ -172,7 +197,11 @@ const Navbar = () => {
               {/* Enlace Cómo Funciona */}
               <Link
                 href="/como-funciona"
-                className="inline-flex items-center px-2 py-2 text-base font-medium text-brand-neutral-800 hover:text-brand-mauve-600 transition-colors"
+                className={`inline-flex items-center px-2 py-2 text-base font-medium ${
+                  scrolled 
+                    ? "text-brand-neutral-800 hover:text-brand-mauve-600" 
+                    : "text-white hover:text-brand-neutral-200"
+                } transition-colors`}
               >
                 Cómo funciona
               </Link>
@@ -183,7 +212,11 @@ const Navbar = () => {
           <div className="hidden sm:flex sm:items-center">
             <button
               onClick={toggleLoginModal}
-              className="btn btn-primary text-white shadow-sm hover:shadow-md"
+              className={`btn ${
+                scrolled 
+                  ? "btn-primary text-white" 
+                  : "bg-white/20 backdrop-blur-sm text-white hover:bg-white/30"
+              } shadow-sm hover:shadow-md transition-all`}
             >
               Iniciar sesión / Registrarse
             </button>
@@ -193,7 +226,11 @@ const Navbar = () => {
           <div className="flex items-center sm:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-brand-neutral-700 hover:text-brand-mauve-600 hover:bg-brand-neutral-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-mauve-300"
+              className={`inline-flex items-center justify-center p-2 rounded-md ${
+                scrolled 
+                  ? "text-brand-neutral-700 hover:text-brand-mauve-600 hover:bg-brand-neutral-50" 
+                  : "text-white hover:text-brand-neutral-200 hover:bg-white/10"
+              } focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-mauve-300 transition-colors`}
             >
               <span className="sr-only">Abrir menú principal</span>
               {/* Icono menú hamburguesa */}
