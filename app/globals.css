@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: #F2EFDF;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-handwritten: 'Caveat', cursive;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #171717;
+    --foreground: #F2EFDF;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Enlaces y botones transiciones */
+a, button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Estilo base para tarjetas con borde estilo boceto */
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden border-2 border-brand-teal-500 relative;
+  background-clip: padding-box;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #2D5C50 0%, #2D5C50 100%);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.card:hover {
+  @apply shadow-lg;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilos de tipografía basados en el logo */
+h1, .h1 {
+  @apply text-4xl font-bold tracking-tight md:text-5xl font-handwritten;
+}
+
+h2, .h2 {
+  @apply text-3xl font-semibold tracking-tight md:text-4xl font-handwritten;
+}
+
+h3, .h3 {
+  @apply text-2xl font-semibold md:text-3xl font-handwritten;
+}
+
+h4, .h4 {
+  @apply text-xl font-semibold md:text-2xl font-handwritten;
+}
+
+h5, .h5 {
+  @apply text-lg font-semibold md:text-xl;
+}
+
+h6, .h6 {
+  @apply text-base font-semibold md:text-lg;
+}
+
+p {
+  @apply text-base leading-relaxed;
+}
+
+/* Estilos de botones inspirados en el logo */
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all;
+}
+
+.btn-primary {
+  @apply bg-brand-teal-500 text-white hover:bg-brand-teal-600 focus:ring-brand-teal-500;
+}
+
+.btn-secondary {
+  @apply bg-brand-coral-500 text-white hover:bg-brand-coral-600 focus:ring-brand-coral-500;
+}
+
+.btn-outline {
+  @apply bg-transparent border-2 border-brand-teal-500 text-brand-teal-700 hover:bg-brand-teal-50 focus:ring-brand-teal-500;
+}
+
+/* Contenedores */
+.container {
+  @apply mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Clase para bordes con estilo de trazo de pincel */
+.brush-border {
+  @apply relative;
+  box-shadow: 0 0 0 2px #2D5C50;
+  border-radius: 0.25rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Estilo personalizado de marca inspirado en el logo */
+.brand-hanger {
+  position: relative;
+  display: inline-block;
+}
+
+.brand-hanger::before {
+  content: "";
+  background-image: url('/images/hanger-icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 1.5em;
+  width: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
