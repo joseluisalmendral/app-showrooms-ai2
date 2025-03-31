@@ -21,10 +21,192 @@ function generateSlug(text) {
     .replace(/ +/g, '-');
 }
 
+// Función para validar email con una expresión regular más estricta
+function validateEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
+
+// Función para validar contraseña con requisitos de seguridad
+function validatePassword(password) {
+  // Debe tener al menos 8 caracteres
+  if (password.length < 8) {
+    return {
+      valid: false,
+      message: 'La contraseña debe tener al menos 8 caracteres'
+    };
+  }
+  
+  // Debe contener al menos un número
+  if (!/\d/.test(password)) {
+    return {
+      valid: false,
+      message: 'La contraseña debe contener al menos un número'
+    };
+  }
+  
+  // Debe contener al menos un carácter especial
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    return {
+      valid: false,
+      message: 'La contraseña debe contener al menos un carácter especial'
+    };
+  }
+  
+  // Debe contener al menos una letra mayúscula
+  if (!/[A-Z]/.test(password)) {
+    return {
+      valid: false,
+      message: 'La contraseña debe contener al menos una letra mayúscula'
+    };
+  }
+  
+  return { valid: true };
+}
+
+// Función para sanitizar texto básico
+function sanitizeText(text) {
+  if (!text) return '';
+  return text
+    .trim()
+    .replace(/[<>]/g, '') // Elimina caracteres HTML básicos
+    .slice(0, 255);       // Limita la longitud
+}
+
+// Función para validar nombre/apellido
+function validateName(name) {
+  if (!name || name.trim().length < 2) {
+    return {
+      valid: false,
+      message: 'El nombre debe tener al menos 2 caracteres'
+    };
+  }
+  
+  // Solo permite letras, espacios y algunos caracteres especiales para nombres compuestos
+  if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]+$/.test(name)) {
+    return {
+      valid: false,
+      message: 'El nombre contiene caracteres no permitidos'
+    };
+  }
+  
+  return { valid: true };
+}
+
 export async function POST(request) {
   try {
     // Obtener datos del formulario
     const data = await request.json();
+    
+    // VALIDACIONES MEJORADAS
+    
+    // 1. Validar campos obligatorios
+    const requiredFields = ['email', 'password', 'nombre', 'apellido', 'tipo_usuario'];
+    for (const field of requiredFields) {
+      if (!data[field]) {
+        return NextResponse.json(
+          { success: false, message: `El campo ${field} es obligatorio` },
+          { status: 400 }
+        );
+      }
+    }
+    
+    // 2. Validar formato de email
+    if (!validateEmail(data.email)) {
+      return NextResponse.json(
+        { success: false, message: 'El formato de email es inválido' },
+        { status: 400 }
+      );
+    }
+    
+    // 3. Validar seguridad de contraseña
+    const passwordValidation = validatePassword(data.password);
+    if (!passwordValidation.valid) {
+      return NextResponse.json(
+        { success: false, message: passwordValidation.message },
+        { status: 400 }
+      );
+    }
+    
+    // 4. Validar nombre y apellido
+    const nombreValidation = validateName(data.nombre);
+    if (!nombreValidation.valid) {
+      return NextResponse.json(
+        { success: false, message: nombreValidation.message },
+        { status: 400 }
+      );
+    }
+    
+    const apellidoValidation = validateName(data.apellido);
+    if (!apellidoValidation.valid) {
+      return NextResponse.json(
+        { success: false, message: apellidoValidation.message },
+        { status: 400 }
+      );
+    }
+    
+    // 5. Validar tipo de usuario
+    if (!['marca', 'showroom'].includes(data.tipo_usuario)) {
+      return NextResponse.json(
+        { success: false, message: 'Tipo de usuario inválido' },
+        { status: 400 }
+      );
+    }
+    
+    // 6. Validaciones específicas según tipo de usuario
+    if (data.tipo_usuario === 'marca') {
+      if (!data.nombreMarca) {
+        return NextResponse.json(
+          { success: false, message: 'El nombre de la marca es obligatorio' },
+          { status: 400 }
+        );
+      }
+      
+      // Validar año de fundación (si se proporciona)
+      if (data.anioFundacion) {
+        const year = parseInt(data.anioFundacion);
+        const currentYear = new Date().getFullYear();
+        if (isNaN(year) || year < 1800 || year > currentYear) {
+          return NextResponse.json(
+            { success: false, message: 'Año de fundación inválido' },
+            { status: 400 }
+          );
+        }
+      }
+    } else {
+      // Validaciones para showroom
+      if (!data.nombreShowroom) {
+        return NextResponse.json(
+          { success: false, message: 'El nombre del showroom es obligatorio' },
+          { status: 400 }
+        );
+      }
+      
+      if (!data.direccion) {
+        return NextResponse.json(
+          { success: false, message: 'La dirección es obligatoria' },
+          { status: 400 }
+        );
+      }
+      
+      if (!data.ciudad) {
+        return NextResponse.json(
+          { success: false, message: 'La ciudad es obligatoria' },
+          { status: 400 }
+        );
+      }
+      
+      // Validar capacidad (si se proporciona)
+      if (data.capacidadMarcas) {
+        const capacidad = parseInt(data.capacidadMarcas);
+        if (isNaN(capacidad) || capacidad <= 0 || capacidad > 100) {
+          return NextResponse.json(
+            { success: false, message: 'Capacidad de marcas inválida (debe ser entre 1 y 100)' },
+            { status: 400 }
+          );
+        }
+      }
+    }
     
     // Verificar si el correo ya existe
     const emailCheck = await pool.query(
@@ -39,13 +221,26 @@ export async function POST(request) {
       );
     }
     
+    // Sanitizar datos antes de procesarlos
+    const sanitizedData = {
+      ...data,
+      nombre: sanitizeText(data.nombre),
+      apellido: sanitizeText(data.apellido),
+      email: data.email.toLowerCase().trim(),
+      nombreMarca: data.tipo_usuario === 'marca' ? sanitizeText(data.nombreMarca) : null,
+      nombreShowroom: data.tipo_usuario === 'showroom' ? sanitizeText(data.nombreShowroom) : null,
+      descripcionMarca: data.tipo_usuario === 'marca' ? sanitizeText(data.descripcionMarca) : null,
+      descripcionShowroom: data.tipo_usuario === 'showroom' ? sanitizeText(data.descripcionShowroom) : null,
+      direccion: data.tipo_usuario === 'showroom' ? sanitizeText(data.direccion) : null,
+    };
+    
     // Iniciar una transacción
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
       
       // 1. Crear el usuario
-      const hashedPassword = await bcrypt.hash(data.password, 10);
+      const hashedPassword = await bcrypt.hash(data.password, 12); // Aumentado a 12 rondas
       const userId = uuidv4();
       
       await client.query(
@@ -55,23 +250,19 @@ export async function POST(request) {
         ) VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, 'activo')`,
         [
           userId,
-          data.email,
+          sanitizedData.email,
           hashedPassword,
-          data.nombre,
-          data.apellido,
-          data.tipo_usuario
+          sanitizedData.nombre,
+          sanitizedData.apellido,
+          sanitizedData.tipo_usuario
         ]
       );
       
       // 2. Crear el equipo
       const equipoId = uuidv4();
-      let equipoNombre = '';
-      
-      if (data.tipo_usuario === 'marca') {
-        equipoNombre = data.nombreMarca;
-      } else {
-        equipoNombre = data.nombreShowroom;
-      }
+      let equipoNombre = sanitizedData.tipo_usuario === 'marca' 
+        ? sanitizedData.nombreMarca 
+        : sanitizedData.nombreShowroom;
       
       await client.query(
         `INSERT INTO equipos (
@@ -80,7 +271,7 @@ export async function POST(request) {
         [
           equipoId,
           equipoNombre,
-          data.tipo_usuario,
+          sanitizedData.tipo_usuario,
           userId
         ]
       );
@@ -98,10 +289,10 @@ export async function POST(request) {
       );
       
       // 4. Crear entidad específica (marca o showroom)
-      if (data.tipo_usuario === 'marca') {
+      if (sanitizedData.tipo_usuario === 'marca') {
         // Crear marca
         const marcaId = uuidv4();
-        const slug = generateSlug(data.nombreMarca);
+        const slug = generateSlug(sanitizedData.nombreMarca);
         
         await client.query(
           `INSERT INTO marcas (
@@ -111,15 +302,15 @@ export async function POST(request) {
           [
             marcaId,
             equipoId,
-            data.nombreMarca,
+            sanitizedData.nombreMarca,
             slug,
-            data.descripcionMarca || null,
-            data.anioFundacion || null
+            sanitizedData.descripcionMarca || null,
+            sanitizedData.anioFundacion ? parseInt(sanitizedData.anioFundacion) : null
           ]
         );
         
         // Asignar estilos a la marca
-        if (data.estilosMarca && data.estilosMarca.length > 0) {
+        if (data.estilosMarca && Array.isArray(data.estilosMarca) && data.estilosMarca.length > 0) {
           for (const estiloId of data.estilosMarca) {
             await client.query(
               `INSERT INTO marcas_estilos (id_marca, id_estilo) 
@@ -141,13 +332,13 @@ export async function POST(request) {
       } else {
         // Crear showroom
         const showroomId = uuidv4();
-        const slug = generateSlug(data.nombreShowroom);
+        const slug = generateSlug(sanitizedData.nombreShowroom);
         
         // Obtener id de la ciudad
         let ciudadId;
         const ciudadResult = await client.query(
           'SELECT id FROM ciudades WHERE nombre = $1',
-          [data.ciudad]
+          [sanitizedData.ciudad]
         );
         
         if (ciudadResult.rows.length > 0) {
@@ -158,7 +349,7 @@ export async function POST(request) {
           await client.query(
             `INSERT INTO ciudades (id, nombre, pais) 
              VALUES ($1, $2, 'España')`,
-            [ciudadId, data.ciudad]
+            [ciudadId, sanitizedData.ciudad]
           );
         }
         
@@ -170,17 +361,17 @@ export async function POST(request) {
           [
             showroomId,
             equipoId,
-            data.nombreShowroom,
+            sanitizedData.nombreShowroom,
             slug,
-            data.descripcionShowroom || null,
+            sanitizedData.descripcionShowroom || null,
             ciudadId,
-            data.direccion,
-            data.capacidadMarcas || null
+            sanitizedData.direccion,
+            sanitizedData.capacidadMarcas ? parseInt(sanitizedData.capacidadMarcas) : null
           ]
         );
         
         // Asignar estilos al showroom
-        if (data.estilosShowroom && data.estilosShowroom.length > 0) {
+        if (data.estilosShowroom && Array.isArray(data.estilosShowroom) && data.estilosShowroom.length > 0) {
           for (const estiloId of data.estilosShowroom) {
             await client.query(
               `INSERT INTO showrooms_estilos (id_showroom, id_estilo) 
@@ -211,8 +402,21 @@ export async function POST(request) {
       await client.query('ROLLBACK');
       console.error('Error en la transacción:', error);
       
+      // Mensajes de error más detallados para problemas comunes
+      if (error.code === '23505') { // Violación de restricción única
+        return NextResponse.json(
+          { success: false, message: 'Ya existe un registro con estos datos' },
+          { status: 400 }
+        );
+      } else if (error.code === '23503') { // Violación de clave foránea
+        return NextResponse.json(
+          { success: false, message: 'Datos de referencia inválidos' },
+          { status: 400 }
+        );
+      }
+      
       return NextResponse.json(
-        { success: false, message: 'Error al registrar usuario' },
+        { success: false, message: 'Error al registrar usuario. Por favor, intente de nuevo más tarde.' },
         { status: 500 }
       );
     } finally {
@@ -223,7 +427,7 @@ export async function POST(request) {
     console.error('Error general:', error);
     
     return NextResponse.json(
-      { success: false, message: 'Error del servidor' },
+      { success: false, message: 'Error del servidor. Por favor, intente de nuevo más tarde.' },
       { status: 500 }
     );
   }
