@@ -77,9 +77,25 @@ const Navbar = () => {
     };
   }, [userMenuOpen]);
 
+  //depuracion de sesion
+  useEffect(() => {
+    if (status === 'authenticated') {
+      console.log('Navbar - Usuario autenticado:', session);
+    } else if (status === 'loading') {
+      console.log('Navbar - Cargando sesión...');
+    } else {
+      console.log('Navbar - Usuario no autenticado');
+    }
+  }, [status, session]);
+
   // Función para manejar el inicio de sesión
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     toggleLoginModal();
+    try {
+      await signIn(null, { callbackUrl: '/auth-redirect' });
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+    }
   };
 
   // Función para manejar el cierre de sesión

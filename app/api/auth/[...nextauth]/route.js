@@ -144,6 +144,7 @@ const handler = NextAuth({
     async jwt({ token, user, trigger, session }) {
       // Si el usuario acaba de iniciar sesión, agregar datos adicionales al token
       if (user) {
+        console.log("JWT callback - user data:", user); // Log para depuración
         token.id = user.id;
         token.tipo_usuario = user.tipo_usuario;
         
@@ -163,17 +164,39 @@ const handler = NextAuth({
     
     async session({ session, token }) {
       // Pasar datos del token a la sesión
-      session.user.id = token.id;
-      session.user.tipo_usuario = token.tipo_usuario;
-      session.user.userDetails = token.userDetails;
+      if (token) {
+        session.user.id = token.id;
+        session.user.tipo_usuario = token.tipo_usuario;
+        session.user.userDetails = token.userDetails;
+      }
       
       return session;
     },
     
     async redirect({ url, baseUrl }) {
-      // Redirigir a la página correcta después del login
-      if (url.startsWith(baseUrl)) return url;
-      else if (url.startsWith('/')) return new URL(url, baseUrl).toString();
+      // Lógica mejorada de redirección
+      console.log("Redirect callback - url:", url, "baseUrl:", baseUrl); // Log para depuración
+      
+      // Si la URL ya está completa (con dominio)
+      if (url.startsWith('http') || url.startsWith('https')) {
+        return url;
+      }
+      
+      // Redirección especial para inicios de sesión exitosos
+      if (url.includes('/api/auth/signin') || url === baseUrl) {
+        // Esta URL se genera automáticamente por NextAuth después del login exitoso
+        // Redirigir según el tipo de usuario almacenado en la sesión
+        // Como no tenemos acceso a token/session aquí, llevamos al usuario a una página
+        // intermedia que manejará la redirección específica
+        return `${baseUrl}/auth-redirect`;
+      }
+      
+      // Para otras rutas internas, mantener el comportamiento estándar
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`;
+      }
+      
+      // Por defecto, volver a la URL base
       return baseUrl;
     }
   },
