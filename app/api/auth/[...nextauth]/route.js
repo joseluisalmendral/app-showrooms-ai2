@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 // Importación corregida del adaptador PostgreSQL
-import { PostgresAdapter } from '@auth/pg-adapter';
+import PostgresAdapter from '@auth/pg-adapter';
 import { Pool } from 'pg';
 import bcrypt from 'bcryptjs';
 
