@@ -21,7 +21,43 @@ function generateSlug(text) {
     .replace(/ +/g, '-');
 }
 
+// Función para verificar si un estilo existe y obtener su ID
+async function getEstiloId(client, nombreEstilo) {
+  const result = await client.query(
+    'SELECT id FROM estilos WHERE nombre = $1',
+    [nombreEstilo]
+  );
+  
+  if (result.rows.length > 0) {
+    return result.rows[0].id;
+  }
+  
+  // Si el estilo no existe, devolver 'Casual' como valor predeterminado
+  const defaultResult = await client.query(
+    'SELECT id FROM estilos WHERE nombre = $1',
+    ['Casual']
+  );
+  
+  if (defaultResult.rows.length > 0) {
+    return defaultResult.rows[0].id;
+  }
+  
+  // Si ni siquiera existe 'Casual', devolver el primer estilo disponible
+  const anyResult = await client.query(
+    'SELECT id FROM estilos LIMIT 1'
+  );
+  
+  if (anyResult.rows.length > 0) {
+    return anyResult.rows[0].id;
+  }
+  
+  // Si no hay estilos, esto es un error grave en la configuración
+  throw new Error('No se encontraron estilos en la base de datos');
+}
+
 export async function POST(request) {
+  const client = await pool.connect();
+  
   try {
     // Obtener datos del formulario
     const data = await request.json();
@@ -35,10 +71,9 @@ export async function POST(request) {
     }
     
     // Iniciar una transacción
-    const client = await pool.connect();
+    await client.query('BEGIN');
+    
     try {
-      await client.query('BEGIN');
-      
       // 1. Crear el usuario
       const hashedPassword = await bcrypt.hash(data.password || '12345678', 10);
       const userId = uuidv4();
@@ -62,7 +97,7 @@ export async function POST(request) {
       const equipoId = uuidv4();
       let equipoNombre = '';
       
-      if (data.tipo_usuario === 'marca') {
+      if (data.tipo_usuario === 'marca' || !data.tipo_usuario) {
         equipoNombre = data.nombreMarca || 'Nueva Marca';
       } else {
         equipoNombre = data.nombreShowroom || 'Nuevo Showroom';
@@ -114,26 +149,27 @@ export async function POST(request) {
           ]
         );
         
-        // Asignar estilos a la marca (si existen)
+        // Asignar estilos a la marca
         if (data.estilosMarca && Array.isArray(data.estilosMarca) && data.estilosMarca.length > 0) {
-          for (const estiloId of data.estilosMarca) {
-            try {
-              await client.query(
-                `INSERT INTO marcas_estilos (id_marca, id_estilo) 
-                 VALUES ($1, (SELECT id FROM estilos WHERE nombre = $2))`,
-                [marcaId, estiloId]
-              );
-            } catch (error) {
-              console.log(`Error al asignar estilo ${estiloId} a marca: ${error.message}`);
-              // Continuamos aunque haya error en estilos
-            }
+          for (const nombreEstilo of data.estilosMarca) {
+            // Obtener el ID del estilo verificando primero que exista
+            const estiloId = await getEstiloId(client, nombreEstilo);
+            
+            // Insertar la relación marca-estilo
+            await client.query(
+              `INSERT INTO marcas_estilos (id_marca, id_estilo) 
+               VALUES ($1, $2)`,
+              [marcaId, estiloId]
+            );
           }
         } else {
-          // Asignar al menos un estilo por defecto
+          // Asignar al menos un estilo por defecto (Casual)
+          const defaultEstiloId = await getEstiloId(client, 'Casual');
+          
           await client.query(
             `INSERT INTO marcas_estilos (id_marca, id_estilo) 
-             VALUES ($1, (SELECT id FROM estilos WHERE nombre = 'Casual'))`,
-            [marcaId]
+             VALUES ($1, $2)`,
+            [marcaId, defaultEstiloId]
           );
         }
         
@@ -152,32 +188,36 @@ export async function POST(request) {
         const nombreShowroom = data.nombreShowroom || 'Nuevo Showroom';
         const slug = generateSlug(nombreShowroom);
         
-        // Obtener id de la ciudad
+        // Obtener id de la ciudad de forma segura
         let ciudadId;
-        const ciudadResult = await client.query(
-          'SELECT id FROM ciudades WHERE nombre = $1',
-          [data.ciudad || 'Madrid']
-        );
-        
-        if (ciudadResult.rows.length > 0) {
-          ciudadId = ciudadResult.rows[0].id;
-        } else {
-          // Si la ciudad no existe, usar una ciudad por defecto
-          const ciudadDefaultResult = await client.query(
-            'SELECT id FROM ciudades LIMIT 1'
+        try {
+          const ciudadResult = await client.query(
+            'SELECT id FROM ciudades WHERE nombre = $1',
+            [data.ciudad || 'Madrid']
           );
           
-          if (ciudadDefaultResult.rows.length > 0) {
-            ciudadId = ciudadDefaultResult.rows[0].id;
+          if (ciudadResult.rows.length > 0) {
+            ciudadId = ciudadResult.rows[0].id;
           } else {
-            // Si no hay ciudades, crear una
-            ciudadId = uuidv4();
-            await client.query(
-              `INSERT INTO ciudades (id, nombre, pais) 
-               VALUES ($1, $2, 'España')`,
-              [ciudadId, data.ciudad || 'Madrid']
+            // Si la ciudad no existe, buscar cualquier ciudad
+            const ciudadDefaultResult = await client.query(
+              'SELECT id FROM ciudades LIMIT 1'
             );
+            
+            if (ciudadDefaultResult.rows.length > 0) {
+              ciudadId = ciudadDefaultResult.rows[0].id;
+            } else {
+              // Si no hay ciudades, crear una
+              ciudadId = uuidv4();
+              await client.query(
+                `INSERT INTO ciudades (id, nombre, pais) 
+                 VALUES ($1, $2, 'España')`,
+                [ciudadId, data.ciudad || 'Madrid']
+              );
+            }
           }
+        } catch (error) {
+          throw new Error(`Error al obtener/crear ciudad: ${error.message}`);
         }
         
         await client.query(
@@ -197,26 +237,27 @@ export async function POST(request) {
           ]
         );
         
-        // Asignar estilos al showroom (si existen)
+        // Asignar estilos al showroom
         if (data.estilosShowroom && Array.isArray(data.estilosShowroom) && data.estilosShowroom.length > 0) {
-          for (const estiloId of data.estilosShowroom) {
-            try {
-              await client.query(
-                `INSERT INTO showrooms_estilos (id_showroom, id_estilo) 
-                 VALUES ($1, (SELECT id FROM estilos WHERE nombre = $2))`,
-                [showroomId, estiloId]
-              );
-            } catch (error) {
-              console.log(`Error al asignar estilo ${estiloId} a showroom: ${error.message}`);
-              // Continuamos aunque haya error en estilos
-            }
+          for (const nombreEstilo of data.estilosShowroom) {
+            // Obtener el ID del estilo verificando primero que exista
+            const estiloId = await getEstiloId(client, nombreEstilo);
+            
+            // Insertar la relación showroom-estilo
+            await client.query(
+              `INSERT INTO showrooms_estilos (id_showroom, id_estilo) 
+               VALUES ($1, $2)`,
+              [showroomId, estiloId]
+            );
           }
         } else {
-          // Asignar al menos un estilo por defecto
+          // Asignar al menos un estilo por defecto (Casual)
+          const defaultEstiloId = await getEstiloId(client, 'Casual');
+          
           await client.query(
             `INSERT INTO showrooms_estilos (id_showroom, id_estilo) 
-             VALUES ($1, (SELECT id FROM estilos WHERE nombre = 'Casual'))`,
-            [showroomId]
+             VALUES ($1, $2)`,
+            [showroomId, defaultEstiloId]
           );
         }
         
@@ -239,22 +280,17 @@ export async function POST(request) {
       
     } catch (error) {
       await client.query('ROLLBACK');
-      console.error('Error en la transacción:', error);
-      
-      return NextResponse.json(
-        { success: false, message: 'Error al registrar usuario: ' + error.message },
-        { status: 500 }
-      );
-    } finally {
-      client.release();
+      throw error; // Re-lanzar para que lo capture el try/catch externo
     }
     
   } catch (error) {
-    console.error('Error general:', error);
+    console.error('Error en el registro:', error);
     
     return NextResponse.json(
-      { success: false, message: 'Error del servidor: ' + error.message },
+      { success: false, message: 'Error al registrar usuario: ' + error.message },
       { status: 500 }
     );
+  } finally {
+    client.release();
   }
 }
