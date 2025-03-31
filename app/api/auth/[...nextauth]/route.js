@@ -146,7 +146,7 @@ const handler = NextAuth({
       if (user) {
         console.log("JWT callback - user data:", user); // Log para depuración
         token.id = user.id;
-        token.tipo_usuario = user.tipo_usuario;
+        token.tipo_usuario = user.tipo_usuario || 'marca'; // Establecer un valor predeterminado
         
         // Obtener detalles adicionales según el tipo de usuario
         const userDetails = await getUserDetails(user.id, user.tipo_usuario);
@@ -165,11 +165,15 @@ const handler = NextAuth({
     async session({ session, token }) {
       // Pasar datos del token a la sesión
       if (token) {
+        if (!session.user) {
+          session.user = {};
+        }
         session.user.id = token.id;
         session.user.tipo_usuario = token.tipo_usuario;
         session.user.userDetails = token.userDetails;
       }
       
+      console.log("Session callback - session data:", session); // Log para depuración
       return session;
     },
     
@@ -209,6 +213,8 @@ const handler = NextAuth({
   
   events: {
     async signIn({ user, account, profile, isNewUser }) {
+      console.log("SignIn event:", { user, isNewUser }); // Log para depuración
+      
       // Si es un nuevo usuario de Google, marcar para completar onboarding
       if (isNewUser && account.provider === 'google') {
         // Actualizar el usuario creado para requerir completar el perfil

@@ -17,6 +17,7 @@ const Navbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
   // Variable para determinar si el usuario está autenticado
   const isAuthenticated = status === "authenticated";
@@ -36,6 +37,13 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [scrolled]);
+
+  // Marcar cuando termina la carga inicial
+  useEffect(() => {
+    if (status !== 'loading') {
+      setInitialLoadComplete(true);
+    }
+  }, [status]);
 
   // Efecto para obtener mensajes no leídos (simulado para el MVP)
   useEffect(() => {
@@ -77,10 +85,15 @@ const Navbar = () => {
     };
   }, [userMenuOpen]);
 
-  //depuracion de sesion
+  // Depuración de sesión con información más detallada
   useEffect(() => {
     if (status === 'authenticated') {
-      console.log('Navbar - Usuario autenticado:', session);
+      console.log('Navbar - Usuario autenticado:', {
+        name: session?.user?.name,
+        email: session?.user?.email,
+        tipo_usuario: session?.user?.tipo_usuario,
+        userDetails: session?.user?.userDetails
+      });
     } else if (status === 'loading') {
       console.log('Navbar - Cargando sesión...');
     } else {
@@ -92,7 +105,17 @@ const Navbar = () => {
   const handleSignIn = async () => {
     toggleLoginModal();
     try {
-      await signIn(null, { callbackUrl: '/auth-redirect' });
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+      });
+      
+      if (result?.error) {
+        console.error('Error de inicio de sesión:', result.error);
+      } else {
+        router.push('/auth-redirect');
+      }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
@@ -100,6 +123,7 @@ const Navbar = () => {
 
   // Función para manejar el cierre de sesión
   const handleSignOut = async () => {
+    setUserMenuOpen(false);
     await signOut({ redirect: false });
     router.push('/');
   };
@@ -320,7 +344,7 @@ const Navbar = () => {
 
           {/* Botones de autenticación o menú de usuario */}
           <div className="hidden sm:flex sm:items-center space-x-2">
-            {isLoading ? (
+            {isLoading || !initialLoadComplete ? (
               // Mostrar un placeholder de carga
               <div className="w-8 h-8 rounded-full bg-brand-neutral-200 animate-pulse"></div>
             ) : isAuthenticated ? (
@@ -398,7 +422,7 @@ const Navbar = () => {
                       
                       {/* Enlaces de usuario */}
                       <Link
-                        href={`/dashboard/${session.user.tipo_usuario}`}
+                        href={`/dashboard/${session.user.tipo_usuario || 'marca'}`}
                         className="block px-4 py-2 text-sm text-brand-neutral-700 hover:bg-brand-neutral-100"
                       >
                         Dashboard
@@ -440,7 +464,7 @@ const Navbar = () => {
             ) : (
               // Si el usuario no está autenticado, mostrar botón de inicio de sesión
               <button
-                onClick={handleSignIn}
+                onClick={toggleLoginModal}
                 className={`btn ${
                   scrolled 
                     ? "btn-primary text-white" 
@@ -546,7 +570,7 @@ const Navbar = () => {
             
             {/* Enlaces de navegación */}
             <Link
-              href={`/dashboard/${session.user.tipo_usuario}`}
+              href={`/dashboard/${session.user.tipo_usuario || 'marca'}`}
               className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-brand-neutral-700 hover:text-brand-neutral-800 hover:bg-brand-neutral-50 hover:border-brand-mauve-300"
             >
               Dashboard
@@ -689,16 +713,41 @@ const Navbar = () => {
               </button>
             </div>
 
+            {/* Formulario de inicio de sesión */}
+            <div className="mb-6">
+              <form>
+                <div className="mb-4">
+                  <label htmlFor="email" className="block text-sm font-medium text-brand-neutral-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="w-full px-3 py-2 border border-brand-neutral-300 rounded-md"
+                    placeholder="tu@email.com"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="password" className="block text-sm font-medium text-brand-neutral-700 mb-1">
+                    Contraseña
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    className="w-full px-3 py-2 border border-brand-neutral-300 rounded-md"
+                    placeholder="Tu contraseña"
+                  />
+                </div>
+              </form>
+            </div>
+
             {/* Opciones de autenticación */}
             <div className="space-y-4">
               <button
-                onClick={() => {
-                  toggleLoginModal();
-                  router.push(`/iniciar-sesion?tipo=${userType}`);
-                }}
+                onClick={handleSignIn}
                 className="w-full py-2 px-4 bg-brand-mauve-600 text-white rounded-md hover:bg-brand-mauve-700 focus:outline-none focus:ring-2 focus:ring-brand-mauve-500 focus:ring-offset-2"
               >
-                Iniciar sesión con email
+                Iniciar sesión
               </button>
               
               <button

@@ -1,15 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function IniciarSesion() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
-  const error = searchParams.get('error');
+  const { status } = useSession();
+  
+  // Si ya está autenticado, redirigir al dashboard
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/auth-redirect');
+    }
+  }, [status, router]);
+  
+  const callbackUrl = searchParams.get('callbackUrl') || '/auth-redirect';
+  const errorParam = searchParams.get('error');
   
   const [userType, setUserType] = useState('marca'); // 'marca' o 'showroom'
   const [email, setEmail] = useState('');
@@ -32,11 +41,11 @@ export default function IniciarSesion() {
   };
 
   // Si hay un error en la URL, mostrarlo
-  useState(() => {
-    if (error) {
-      setLoginError(getErrorMessage(error));
+  useEffect(() => {
+    if (errorParam) {
+      setLoginError(getErrorMessage(errorParam));
     }
-  }, [error]);
+  }, [errorParam]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,18 +60,23 @@ export default function IniciarSesion() {
       setLoginError('');
       
       // Intentar iniciar sesión con credenciales
+      console.log('Iniciando sesión con:', { email, password, userType });
+      
       const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
-        userType
+        tipo_usuario: userType // Asegurarse de pasar este valor al backend
       });
+      
+      console.log('Resultado inicio sesión:', result);
       
       if (result?.error) {
         setLoginError(getErrorMessage(result.error));
         setIsLoading(false);
       } else {
         // Redirigir después del login exitoso
+        console.log('Inicio de sesión exitoso, redirigiendo a:', callbackUrl);
         router.push(callbackUrl);
       }
     } catch (error) {
@@ -78,7 +92,7 @@ export default function IniciarSesion() {
       setIsLoading(true);
       // Pasar el tipo de usuario como parámetro state
       await signIn('google', { 
-        callbackUrl: `/onboarding?userType=${userType}`,
+        callbackUrl: `/auth-redirect?userType=${userType}`,
       });
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
@@ -86,6 +100,20 @@ export default function IniciarSesion() {
       setIsLoading(false);
     }
   };
+
+  // Si ya está autenticado, mostrar cargando mientras redirige
+  if (status === 'authenticated' || status === 'loading') {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-brand-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-mauve-600"></div>
+          <p className="mt-4 text-brand-neutral-700">
+            {status === 'authenticated' ? 'Ya has iniciado sesión, redirigiendo...' : 'Cargando...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-brand-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
