@@ -416,7 +416,9 @@ export async function POST(request) {
       }
       
       return NextResponse.json(
-        { success: false, message: 'Error al registrar usuario. Por favor, intente de nuevo más tarde.' },
+        { success: false, message: 'Error al registrar usuario. Por favor, intente de nuevo más tarde.',
+          error_original: error
+         },
         { status: 500 }
       );
     } finally {

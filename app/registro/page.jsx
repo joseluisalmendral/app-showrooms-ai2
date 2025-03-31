@@ -243,6 +243,7 @@ export default function Registro() {
       const data = await response.json();
       
       if (!response.ok) {
+        console.log('Error al registrarse -->', data)
         throw new Error(data.message || 'Error al registrarse');
       }
       
