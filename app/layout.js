@@ -1,5 +1,6 @@
 import { Inter, Montserrat, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "./providers";
 
 // Importación de componentes de layout
 import Navbar from "@/components/layout/Navbar";
@@ -58,11 +59,13 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${montserrat.variable} ${ibmPlexMono.variable}`}
     >
       <body className="flex flex-col min-h-screen antialiased bg-brand-neutral-50">
-        <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

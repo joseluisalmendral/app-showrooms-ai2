@@ -2,6 +2,7 @@
 
 #BBDD
 .sql
+script_mongo.js
 
 # dependencies
 /node_modules
