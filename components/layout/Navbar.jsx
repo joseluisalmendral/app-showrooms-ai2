@@ -82,9 +82,13 @@ const Navbar = () => {
         
         // Cargar mensajes/notificaciones no leídas solo cuando se confirma autenticación
         fetchUnreadCounts();
+        
+        // AÑADIR ESTA LÍNEA: Actualizar la sesión para asegurar datos completos
+        refreshSession();
       }
     }
-  }, [status, session]);
+  }, [status, session]);  
+  
 
   // Efecto para obtener mensajes no leídos (simulado para el MVP)
   useEffect(() => {
@@ -190,13 +194,12 @@ const Navbar = () => {
         setLoginError(getErrorMessage(result.error));
         setIsSubmitting(false);
       } else {
-        // Esperar un momento para asegurar que la sesión se actualice
-        setTimeout(() => {
-          // Cerrar el modal solo después de un inicio de sesión exitoso
-          toggleLoginModal();
-          // Usar una redirección del lado del cliente para asegurar que la sesión esté disponible
-          router.push('/auth-redirect');
-        }, 500);
+        // Cerrar el modal primero
+        toggleLoginModal();
+        
+        // Usar window.location.href para forzar una recarga completa de la página
+        // Esto garantiza que la sesión se cargue correctamente
+        window.location.href = '/auth-redirect';
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);

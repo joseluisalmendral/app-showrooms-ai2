@@ -80,9 +80,19 @@ export async function middleware(request) {
       
       // Si el usuario ya está autenticado, redirigir al dashboard
       if (token) {
+        // Asegúrate de que siempre haya un tipo de usuario válido
         const userType = token.tipo_usuario || 'marca';
-        console.log(`Middleware - Usuario ya autenticado, redirigiendo a: /dashboard/${userType}`);
-        return NextResponse.redirect(new URL(`/dashboard/${userType}`, request.url));
+        
+        console.log(`Middleware - Usuario autenticado: ${token.email}, Tipo: ${userType}`);
+        
+        // Si la ruta actual es específica para un tipo de usuario diferente
+        if (pathname.startsWith('/dashboard/marca') && userType !== 'marca') {
+          return NextResponse.redirect(new URL(`/dashboard/${userType}`, request.url));
+        }
+        
+        if (pathname.startsWith('/dashboard/showroom') && userType !== 'showroom') {
+          return NextResponse.redirect(new URL(`/dashboard/${userType}`, request.url));
+        }
       }
     } catch (error) {
       console.error('Middleware - Error al verificar token para rutas públicas:', error);

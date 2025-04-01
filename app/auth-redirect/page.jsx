@@ -14,19 +14,12 @@ export default function AuthRedirect() {
     // Log detallado para depuración
     console.log('AuthRedirect - Estado sesión:', status);
     console.log('AuthRedirect - Datos sesión:', session);
-    console.log('AuthRedirect - Intentos de redirección:', redirectAttempts);
-    
-    // Evitar procesamiento múltiple
-    if (isProcessing) return;
     
     // Esperar hasta que la sesión esté lista
     if (status === 'loading') return;
     
-    // Verificación más robusta de la autenticación
+    // Si el usuario está autenticado
     if (status === 'authenticated' && session?.user) {
-      // Evitar ejecuciones duplicadas
-      setIsProcessing(true);
-      
       console.log('Usuario autenticado:', {
         name: session?.user?.name,
         email: session?.user?.email,
@@ -34,8 +27,7 @@ export default function AuthRedirect() {
         userDetails: session?.user?.userDetails
       });
       
-      // Asegurar que el tipo de usuario esté definido
-      // Si no está disponible en la sesión, intentar actualizarla
+      // Obtener tipo de usuario con fallbacks
       let userType = session?.user?.tipo_usuario;
       
       if (!userType && session?.user?.userDetails?.role) {
@@ -46,36 +38,19 @@ export default function AuthRedirect() {
         update({ tipo_usuario: userType });
       }
       
-      // Redirección basada en tipo de usuario con fallback más seguro
-      if (userType === 'marca') {
-        router.push('/dashboard/marca');
-      } else if (userType === 'showroom') {
-        router.push('/dashboard/showroom');
-      } else {
-        // Fallback más seguro con advertencia
-        console.warn(`Tipo de usuario indefinido o no reconocido: "${userType}", utilizando valor predeterminado "marca"`);
-        router.push('/dashboard/marca');
+      // Si aún no hay tipo de usuario, establecer 'marca' como predeterminado
+      if (!userType) {
+        userType = 'marca';
+        console.log('Tipo de usuario no detectado, usando valor predeterminado:', userType);
       }
+      
+      // Navegar directamente a la página correcta
+      window.location.href = `/dashboard/${userType}`;
     } else if (status === 'unauthenticated') {
       // Si no está autenticado, redirigir a login
-      router.push('/iniciar-sesion');
-    } else if (redirectAttempts < 8) {
-      // Intentar más veces con un tiempo de espera incremental
-      const timeout = Math.min(1000 * (redirectAttempts + 1), 5000);
-      
-      console.log(`Esperando ${timeout}ms antes del próximo intento...`);
-      
-      const timer = setTimeout(() => {
-        setRedirectAttempts(prev => prev + 1);
-      }, timeout);
-      
-      return () => clearTimeout(timer);
-    } else {
-      // Después de varios intentos, ofrecer una opción más clara al usuario
-      console.error('No se pudo determinar el estado de autenticación después de varios intentos');
-      router.push('/iniciar-sesion?error=session_error');
+      window.location.href = '/iniciar-sesion';
     }
-  }, [status, session, router, redirectAttempts, isProcessing, update]);
+  }, [status, session, update]);
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-brand-neutral-50">

@@ -75,9 +75,8 @@ export default function IniciarSesion() {
         setLoginError(getErrorMessage(result.error));
         setIsLoading(false);
       } else {
-        // Redirigir después del login exitoso
-        console.log('Inicio de sesión exitoso, redirigiendo a:', callbackUrl);
-        router.push(callbackUrl);
+        // Usar window.location.href para forzar una recarga completa
+        window.location.href = callbackUrl;
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
