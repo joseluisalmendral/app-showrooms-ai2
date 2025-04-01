@@ -23,6 +23,8 @@ async function verifyCredentials(credentials) {
   try {
     const { email, password } = credentials;
     
+    console.log(`Verificando credenciales para ${email}`);
+    
     // Buscar el usuario por email
     const result = await pool.query(
       'SELECT id, email, password_hash, tipo_usuario, estado FROM usuarios WHERE email = $1',
@@ -32,16 +34,26 @@ async function verifyCredentials(credentials) {
     const user = result.rows[0];
     
     // Verificar si el usuario existe y está activo
-    if (!user || user.estado !== 'activo') {
+    if (!user) {
+      console.log(`Usuario no encontrado para ${email}`);
+      return null;
+    }
+    
+    if (user.estado !== 'activo') {
+      console.log(`Usuario encontrado pero inactivo: ${email}, estado: ${user.estado}`);
       return null;
     }
     
     // Verificar la contraseña
+    console.log(`Comparando contraseña para ${email}`);
     const passwordMatch = await bcrypt.compare(password, user.password_hash);
     
     if (!passwordMatch) {
+      console.log(`Contraseña incorrecta para ${email}`);
       return null;
     }
+    
+    console.log(`Autenticación exitosa para ${email}, tipo: ${user.tipo_usuario}`);
     
     // Si las credenciales son correctas, devolver datos del usuario
     return {
@@ -115,8 +127,33 @@ const handler = NextAuth({
         password: { label: "Contraseña", type: "password" }
       },
       async authorize(credentials) {
-        const user = await verifyCredentials(credentials);
-        return user;
+        console.log('Autorización de credenciales iniciada para email:', credentials?.email);
+        
+        try {
+          // Validación básica
+          if (!credentials?.email || !credentials?.password) {
+            console.log('Credenciales incompletas');
+            return null;
+          }
+          
+          const user = await verifyCredentials(credentials);
+          
+          if (!user) {
+            console.log('Usuario no encontrado o credenciales inválidas');
+            return null;
+          }
+          
+          console.log('Usuario autenticado correctamente:', {
+            id: user.id,
+            email: user.email,
+            tipo_usuario: user.tipo_usuario
+          });
+          
+          return user;
+        } catch (error) {
+          console.error('Error en el proceso de autorización:', error);
+          return null;
+        }
       }
     }),
     GoogleProvider({

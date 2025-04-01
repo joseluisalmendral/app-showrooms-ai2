@@ -28,6 +28,8 @@ export default function IniciarSesion() {
 
   // Manejar errores de autenticación
   const getErrorMessage = (error) => {
+    console.log('Código de error recibido:', error);
+    
     switch (error) {
       case 'CredentialsSignin':
         return 'Email o contraseña incorrectos';
@@ -35,8 +37,10 @@ export default function IniciarSesion() {
         return 'Esta cuenta ya está asociada a un método de inicio de sesión diferente';
       case 'OAuthSignInFailed':
         return 'Error al iniciar sesión con Google. Intenta de nuevo';
+      case 'unknown_error':
+        return 'Error desconocido al iniciar sesión. Verifique la consola para más detalles.';
       default:
-        return 'Error al iniciar sesión. Intenta de nuevo';
+        return `Error al iniciar sesión: ${error || 'Desconocido'}`;
     }
   };
 

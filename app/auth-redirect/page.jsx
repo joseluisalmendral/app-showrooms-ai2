@@ -15,8 +15,16 @@ export default function AuthRedirect() {
     console.log('AuthRedirect - Estado sesión:', status);
     console.log('AuthRedirect - Datos sesión:', session);
     
+    // Contar intentos de redirección
+    if (status !== 'loading') {
+      setRedirectAttempts(prev => prev + 1);
+    }
+    
     // Esperar hasta que la sesión esté lista
-    if (status === 'loading') return;
+    if (status === 'loading') {
+      console.log('Cargando sesión...');
+      return;
+    }
     
     // Si el usuario está autenticado
     if (status === 'authenticated' && session?.user) {
@@ -24,8 +32,13 @@ export default function AuthRedirect() {
         name: session?.user?.name,
         email: session?.user?.email,
         tipo_usuario: session?.user?.tipo_usuario,
-        userDetails: session?.user?.userDetails
+        userDetails: session?.user?.userDetails ? 'presente' : 'ausente',
+        redirectAttempts
       });
+      
+      // Marcar como procesando para evitar múltiples redirecciones
+      if (isProcessing) return;
+      setIsProcessing(true);
       
       // Obtener tipo de usuario con fallbacks
       let userType = session?.user?.tipo_usuario;
@@ -35,7 +48,11 @@ export default function AuthRedirect() {
         userType = session.user.userDetails.role;
         
         // Actualizar la sesión con el tipo detectado
-        update({ tipo_usuario: userType });
+        update({ tipo_usuario: userType }).then(() => {
+          console.log('Sesión actualizada con tipo de usuario:', userType);
+        }).catch(err => {
+          console.error('Error al actualizar la sesión:', err);
+        });
       }
       
       // Si aún no hay tipo de usuario, establecer 'marca' como predeterminado
@@ -44,13 +61,28 @@ export default function AuthRedirect() {
         console.log('Tipo de usuario no detectado, usando valor predeterminado:', userType);
       }
       
+      console.log(`Redirigiendo a /dashboard/${userType}`);
+      
       // Navegar directamente a la página correcta
-      window.location.href = `/dashboard/${userType}`;
+      try {
+        // Usar router.push primero
+        router.push(`/dashboard/${userType}`);
+        
+        // Respaldo: usar window.location después de un breve retraso
+        setTimeout(() => {
+          window.location.href = `/dashboard/${userType}`;
+        }, 1000);
+      } catch (error) {
+        console.error('Error al redireccionar:', error);
+        // Último recurso
+        window.location.href = `/dashboard/${userType}`;
+      }
     } else if (status === 'unauthenticated') {
-      // Si no está autenticado, redirigir a login
-      window.location.href = '/iniciar-sesion';
+      // Si no está autenticado, redirigir a login con mensaje
+      console.log('Usuario no autenticado, redirigiendo a inicio de sesión');
+      window.location.href = '/iniciar-sesion?error=auth_required&redirect=' + encodeURIComponent(window.location.pathname);
     }
-  }, [status, session, update]);
+  }, [status, session, update, router, redirectAttempts, isProcessing]);
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-brand-neutral-50">

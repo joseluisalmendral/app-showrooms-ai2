@@ -165,9 +165,14 @@ const Navbar = () => {
       setIsSubmitting(true);
       setLoginError('');
       
-      // Intentar iniciar sesión con credenciales
-      console.log('Iniciando sesión con:', { email: loginEmail, password: loginPassword, userType });
+      // Mostrar en consola para depuración
+      console.log('Iniciando sesión con:', { 
+        email: loginEmail, 
+        password: '***REDACTED***', 
+        userType 
+      });
       
+      // Intentar iniciar sesión con credenciales
       const result = await signIn('credentials', {
         redirect: false,
         email: loginEmail,
@@ -176,33 +181,32 @@ const Navbar = () => {
       });
       
       console.log('Resultado inicio sesión:', result);
-
-      const getErrorMessage = (error) => {
-        switch (error) {
-          case 'CredentialsSignin':
-            return 'Email o contraseña incorrectos';
-          case 'OAuthAccountNotLinked':
-            return 'Esta cuenta ya está asociada a un método de inicio de sesión diferente';
-          case 'OAuthSignInFailed':
-            return 'Error al iniciar sesión con Google. Intenta de nuevo';
-          default:
-            return 'Error al iniciar sesión. Intenta de nuevo';
-        }
-      };
-      
-      if (result?.error) {
-        setLoginError(getErrorMessage(result.error));
+  
+      // Si hay un error o el resultado es null, mostrar mensaje de error
+      if (!result || result.error) {
+        const errorMessage = getErrorMessage(result?.error || 'unknown_error');
+        console.error('Error de autenticación:', errorMessage);
+        setLoginError(errorMessage);
         setIsSubmitting(false);
-      } else {
-        // Cerrar el modal primero
+        return;
+      }
+      
+      // Si llegamos aquí, la autenticación fue exitosa
+      console.log('Autenticación exitosa, redirigiendo...');
+      
+      // Antes de cerrar el modal, mostrar mensaje de éxito
+      setLoginError('');
+      
+      // Cerrar el modal después de un breve retraso para que el usuario vea que se completó
+      setTimeout(() => {
         toggleLoginModal();
         
-        // Usar window.location.href para forzar una recarga completa de la página
-        // Esto garantiza que la sesión se cargue correctamente
-        window.location.href = '/auth-redirect';
-      }
+        // Usar window.location.href para forzar una recarga completa
+        // Añadir un parámetro timestamp para evitar caché
+        window.location.href = `/auth-redirect?t=${Date.now()}`;
+      }, 500);
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      console.error('Error inesperado al iniciar sesión:', error);
       setLoginError('Error inesperado. Intenta de nuevo');
       setIsSubmitting(false);
     }
