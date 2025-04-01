@@ -21,29 +21,73 @@ export default function MarcaDashboard() {
   const [recentActivity, setRecentActivity] = useState([]);
   const [recommendedShowrooms, setRecommendedShowrooms] = useState([]);
   
-  useEffect(() => {
-    // Solo cargar datos cuando la sesión está lista
-    if (status === 'loading') return;
+  // Función mejorada para obtener el nombre del perfil con verificaciones más seguras
+  const getProfileName = () => {
+    if (!session?.user) return "Cargando...";
     
-    // Función para cargar datos del dashboard
+    // Intentar obtener el nombre de varias fuentes posibles
+    const name = session.user.userDetails?.nombre || // Nombre desde userDetails
+               session.user.name || // Nombre desde la sesión directamente
+               session.user.email?.split('@')[0] || // Primera parte del email
+               "Tu Marca"; // Fallback
+               
+    return name;
+  };
+  
+  // Función para verificar si hay información completa del perfil
+  const hasCompleteProfile = () => {
+    if (!session?.user?.userDetails) return false;
+    
+    const details = session.user.userDetails;
+    
+    // Verificar campos importantes para marca
+    return !!(details.nombre && 
+             details.descripcion && 
+             (details.logo_url || details.foto_portada));
+  };
+
+  // Mejorar la carga de datos solo cuando la sesión esté totalmente cargada
+  useEffect(() => {
     const loadDashboardData = async () => {
+      // Solo cargar datos cuando tengamos la sesión completamente cargada
+      // y tengamos información del usuario
+      if (status === 'loading' || !session?.user) return;
+
+      console.log('Dashboard - Iniciando carga de datos con sesión:', {
+        userType: session.user.tipo_usuario,
+        userId: session.user.id,
+        hasUserDetails: !!session.user.userDetails
+      });
+
       setLoading(true);
+
       try {
-        // En una implementación real, aquí harías llamadas a la API
-        // Por ahora, usamos datos de ejemplo
-        
         // Simular carga de datos
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        // En una implementación real, estas serían llamadas a la API
+        // usando el ID de usuario y tipo de la sesión
+        /*
+        const statsResponse = await fetch(`/api/dashboard/${session.user.tipo_usuario}/stats?userId=${session.user.id}`);
+        const activityResponse = await fetch(`/api/dashboard/${session.user.tipo_usuario}/activity?userId=${session.user.id}`);
         
-        // Estadísticas
+        if (statsResponse.ok && activityResponse.ok) {
+          const statsData = await statsResponse.json();
+          const activityData = await activityResponse.json();
+          
+          setStats(statsData);
+          setRecentActivity(activityData);
+        }
+        */
+
+        // Datos simulados
         setStats({
           visitas: 324,
           contactos: 18,
           colaboraciones: 5,
           mensajesNoLeidos: Math.floor(Math.random() * 5)
         });
-        
-        // Actividad reciente
+
         setRecentActivity([
           {
             id: 1,
@@ -68,7 +112,7 @@ export default function MarcaDashboard() {
           }
         ]);
         
-        // Showrooms recomendados
+        // Cargar showrooms recomendados
         setRecommendedShowrooms([
           {
             id: 's1',
@@ -98,19 +142,47 @@ export default function MarcaDashboard() {
             priceRange: '€90-110/día'
           }
         ]);
-        
+
+        console.log('Dashboard - Datos cargados correctamente');
       } catch (error) {
         console.error('Error cargando datos del dashboard:', error);
       } finally {
         setLoading(false);
       }
     };
-    
+
     loadDashboardData();
-  }, [status]);
+  }, [status, session]);
   
-  // Obtener nombre de la marca desde la sesión
-  const brandName = session?.user?.userDetails?.nombre || "Tu Marca";
+  // Método para refrescar los datos del dashboard
+  const refreshDashboardData = async () => {
+    if (status !== 'authenticated' || !session?.user) return;
+    
+    setLoading(true);
+    
+    try {
+      // Aquí irían las llamadas reales a la API
+      console.log('Actualizando datos del dashboard...');
+      
+      // Simulación de refresco
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Actualizar estados con nuevos datos simulados
+      setStats(prevStats => ({
+        ...prevStats,
+        mensajesNoLeidos: Math.floor(Math.random() * 5)
+      }));
+      
+      console.log('Datos del dashboard actualizados');
+    } catch (error) {
+      console.error('Error al actualizar datos del dashboard:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Obtener nombre de la marca desde la sesión usando la función mejorada
+  const brandName = getProfileName();
   
   return (
     <DashboardLayout type="marca" title="Dashboard">
@@ -236,8 +308,8 @@ export default function MarcaDashboard() {
             </div>
           </div>
           
-          {/* Completar perfil - condicional */}
-          {(!session?.user?.userDetails?.verified) && (
+          {/* Completar perfil - condicional mejorado usando hasCompleteProfile */}
+          {(!hasCompleteProfile()) && (
             <div className="bg-brand-celeste-50 rounded-xl border border-brand-celeste-200 p-6">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
@@ -283,10 +355,33 @@ export default function MarcaDashboard() {
         <div className="space-y-8">
           {/* Actividad reciente */}
           <div className="bg-white rounded-xl shadow-sm border border-brand-neutral-200 overflow-hidden">
-            <div className="p-6 border-b border-brand-neutral-200">
+            <div className="p-6 border-b border-brand-neutral-200 flex justify-between items-center">
               <h2 className="text-xl font-semibold text-brand-neutral-900">
                 Actividad reciente
               </h2>
+              
+              {/* Botón para refrescar los datos */}
+              <button 
+                onClick={refreshDashboardData}
+                disabled={loading}
+                className="p-2 rounded-full text-brand-neutral-500 hover:text-brand-mauve-600 hover:bg-brand-neutral-100 transition-colors disabled:opacity-50"
+                aria-label="Refrescar datos"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+                  />
+                </svg>
+              </button>
             </div>
             
             <div className="p-4">
@@ -403,7 +498,7 @@ export default function MarcaDashboard() {
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.533 1.533 0 00-2.287-.947c-1.543.836-2.942-.734-2.106-2.106a1.724 1.724 0 00-.947-2.287c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 00.947-2.287c-.836-1.372.734-2.942 2.106-2.106a1.724 1.724 0 002.287-.947z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   Configuración

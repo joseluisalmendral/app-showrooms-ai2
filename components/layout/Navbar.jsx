@@ -7,7 +7,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -67,6 +67,9 @@ const Navbar = () => {
     // Solo ejecutar cuando el estado cambie de loading a authenticated/unauthenticated
     if (status !== 'loading') {
       console.log('Navbar - Estado de sesión actualizado:', status);
+      
+      // Marcar que la carga inicial está completa
+      setInitialLoadComplete(true);
       
       // Si el usuario está autenticado y tenemos datos de sesión, registrarlos
       if (status === 'authenticated' && session?.user) {
@@ -169,6 +172,19 @@ const Navbar = () => {
       });
       
       console.log('Resultado inicio sesión:', result);
+
+      const getErrorMessage = (error) => {
+        switch (error) {
+          case 'CredentialsSignin':
+            return 'Email o contraseña incorrectos';
+          case 'OAuthAccountNotLinked':
+            return 'Esta cuenta ya está asociada a un método de inicio de sesión diferente';
+          case 'OAuthSignInFailed':
+            return 'Error al iniciar sesión con Google. Intenta de nuevo';
+          default:
+            return 'Error al iniciar sesión. Intenta de nuevo';
+        }
+      };
       
       if (result?.error) {
         setLoginError(getErrorMessage(result.error));
@@ -209,16 +225,14 @@ const Navbar = () => {
   };
   
  // Añadir función para forzar la actualización de la sesión cuando sea necesario
-  const refreshSession = async () => {
-    try {
-      // Usar el método update para forzar la actualización de la sesión
-      const { update } = useSession();
-      await update();
-      console.log('Sesión actualizada forzosamente');
-    } catch (error) {
-      console.error('Error al actualizar la sesión:', error);
-    }
-  };
+ const refreshSession = async () => {
+  try {
+    await update();
+    console.log('Sesión actualizada forzosamente');
+  } catch (error) {
+    console.error('Error al actualizar la sesión:', error);
+  }
+};
 
   // Determinar el tipo de usuario y el texto a mostrar
   const getUserTypeText = () => {
