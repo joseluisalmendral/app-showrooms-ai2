@@ -10,7 +10,10 @@ export async function middleware(request) {
     '/perfil',
     '/mensajes',
     '/notificaciones',
-    '/configuracion'
+    '/configuracion',
+    '/colaboraciones',
+    '/solicitudes',
+    '/disponibilidad'
   ];
   
   // Comprobar si la ruta actual está protegida
@@ -18,46 +21,76 @@ export async function middleware(request) {
     pathname.startsWith(path)
   );
   
+  // Log para depuración
+  console.log(`Middleware - Verificando ruta: ${pathname}, Protegida: ${isProtectedPath}`);
+  
   if (isProtectedPath) {
-    const token = await getToken({ 
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET
-    });
-    
-    // Si no hay token (usuario no autenticado), redirigir a iniciar sesión
-    if (!token) {
-      // Guardar la URL a la que el usuario intentaba acceder para redireccionar después del login
-      const url = new URL('/iniciar-sesion', request.url);
-      url.searchParams.set('callbackUrl', encodeURI(pathname));
+    try {
+      const token = await getToken({ 
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET
+      });
       
-      return NextResponse.redirect(url);
-    }
-    
-    // Rutas específicas para tipos de usuario
-    if (pathname.startsWith('/dashboard/marca') && token.tipo_usuario !== 'marca') {
-      // Redirigir a la página de dashboard correcta si intenta acceder al dashboard equivocado
-      return NextResponse.redirect(new URL(`/dashboard/${token.tipo_usuario}`, request.url));
-    }
-    
-    if (pathname.startsWith('/dashboard/showroom') && token.tipo_usuario !== 'showroom') {
-      // Redirigir a la página de dashboard correcta si intenta acceder al dashboard equivocado
-      return NextResponse.redirect(new URL(`/dashboard/${token.tipo_usuario}`, request.url));
+      // Log del token para depuración
+      console.log(`Middleware - Token encontrado: ${!!token}, Tipo usuario: ${token?.tipo_usuario || 'no definido'}`);
+      
+      // Si no hay token (usuario no autenticado), redirigir a iniciar sesión
+      if (!token) {
+        // Guardar la URL a la que el usuario intentaba acceder para redireccionar después del login
+        const url = new URL('/iniciar-sesion', request.url);
+        url.searchParams.set('callbackUrl', encodeURI(pathname));
+        
+        console.log(`Middleware - Redirigiendo a login con callbackUrl: ${pathname}`);
+        return NextResponse.redirect(url);
+      }
+      
+      // Establecer un tipo de usuario por defecto si no existe
+      const userType = token.tipo_usuario || (
+        pathname.includes('/marca') ? 'marca' : 
+        pathname.includes('/showroom') ? 'showroom' : 
+        'marca' // valor por defecto
+      );
+      
+      // Rutas específicas para tipos de usuario
+      if (pathname.startsWith('/dashboard/marca') && userType !== 'marca') {
+        console.log(`Middleware - Acceso incorrecto al dashboard, redirigiendo a: /dashboard/${userType}`);
+        // Redirigir a la página de dashboard correcta si intenta acceder al dashboard equivocado
+        return NextResponse.redirect(new URL(`/dashboard/${userType}`, request.url));
+      }
+      
+      if (pathname.startsWith('/dashboard/showroom') && userType !== 'showroom') {
+        console.log(`Middleware - Acceso incorrecto al dashboard, redirigiendo a: /dashboard/${userType}`);
+        // Redirigir a la página de dashboard correcta si intenta acceder al dashboard equivocado
+        return NextResponse.redirect(new URL(`/dashboard/${userType}`, request.url));
+      }
+    } catch (error) {
+      console.error('Middleware - Error al verificar autenticación:', error);
+      // En caso de error al verificar el token, redirigir a login
+      return NextResponse.redirect(new URL('/iniciar-sesion?error=auth_error', request.url));
     }
   }
   
   // Rutas para usuarios no autenticados
   if (pathname.startsWith('/iniciar-sesion') || pathname.startsWith('/registro')) {
-    const token = await getToken({ 
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET
-    });
-    
-    // Si el usuario ya está autenticado, redirigir al dashboard
-    if (token) {
-      return NextResponse.redirect(new URL(`/dashboard/${token.tipo_usuario}`, request.url));
+    try {
+      const token = await getToken({ 
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET
+      });
+      
+      // Si el usuario ya está autenticado, redirigir al dashboard
+      if (token) {
+        const userType = token.tipo_usuario || 'marca';
+        console.log(`Middleware - Usuario ya autenticado, redirigiendo a: /dashboard/${userType}`);
+        return NextResponse.redirect(new URL(`/dashboard/${userType}`, request.url));
+      }
+    } catch (error) {
+      console.error('Middleware - Error al verificar token para rutas públicas:', error);
+      // Continuar con la navegación normal en caso de error
     }
   }
   
+  // Si no se requiere redirección, continuar
   return NextResponse.next();
 }
 
@@ -69,6 +102,9 @@ export const config = {
     '/mensajes/:path*',
     '/notificaciones/:path*',
     '/configuracion/:path*',
+    '/colaboraciones/:path*',
+    '/solicitudes/:path*',
+    '/disponibilidad/:path*',
     '/iniciar-sesion',
     '/registro'
   ]

@@ -38,12 +38,50 @@ const Navbar = () => {
     };
   }, [scrolled]);
 
+  // Función para cargar contadores de mensajes/notificaciones no leídos
+  const fetchUnreadCounts = async () => {
+    try {
+      // En una implementación real, esto sería una llamada a API
+      // Por ahora simulamos para fines de demostración
+      console.log('Cargando contadores de mensajes y notificaciones no leídos...');
+      
+      // Simulación de carga
+      setTimeout(() => {
+        const messagesCount = Math.floor(Math.random() * 5);
+        const notificationsCount = Math.floor(Math.random() * 3);
+        
+        setUnreadMessages(messagesCount);
+        setUnreadNotifications(notificationsCount);
+        
+        console.log(`Contadores actualizados - Mensajes: ${messagesCount}, Notificaciones: ${notificationsCount}`);
+      }, 500);
+      
+      
+    } catch (error) {
+      console.error('Error al cargar contadores no leídos:', error);
+    }
+  };
+
   // Marcar cuando termina la carga inicial
   useEffect(() => {
+    // Solo ejecutar cuando el estado cambie de loading a authenticated/unauthenticated
     if (status !== 'loading') {
-      setInitialLoadComplete(true);
+      console.log('Navbar - Estado de sesión actualizado:', status);
+      
+      // Si el usuario está autenticado y tenemos datos de sesión, registrarlos
+      if (status === 'authenticated' && session?.user) {
+        console.log('Navbar - Usuario autenticado:', {
+          name: session.user.name,
+          email: session.user.email,
+          tipo_usuario: session.user.tipo_usuario || 'no definido',
+          userDetails: session.user.userDetails ? 'disponible' : 'no disponible'
+        });
+        
+        // Cargar mensajes/notificaciones no leídas solo cuando se confirma autenticación
+        fetchUnreadCounts();
+      }
     }
-  }, [status]);
+  }, [status, session]);
 
   // Efecto para obtener mensajes no leídos (simulado para el MVP)
   useEffect(() => {
@@ -102,30 +140,84 @@ const Navbar = () => {
   }, [status, session]);
 
   // Función para manejar el inicio de sesión
-  const handleSignIn = async () => {
-    toggleLoginModal();
+  const [loginError, setLoginError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  
+  // Manejar inicio de sesión
+  const handleSignIn = async (e) => {
+    e?.preventDefault();
+    
+    if (!loginEmail || !loginPassword) {
+      setLoginError('Por favor, completa todos los campos');
+      return;
+    }
+    
     try {
+      setIsSubmitting(true);
+      setLoginError('');
+      
+      // Intentar iniciar sesión con credenciales
+      console.log('Iniciando sesión con:', { email: loginEmail, password: loginPassword, userType });
+      
       const result = await signIn('credentials', {
         redirect: false,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value
+        email: loginEmail,
+        password: loginPassword,
+        tipo_usuario: userType
       });
       
+      console.log('Resultado inicio sesión:', result);
+      
       if (result?.error) {
-        console.error('Error de inicio de sesión:', result.error);
+        setLoginError(getErrorMessage(result.error));
+        setIsSubmitting(false);
       } else {
-        router.push('/auth-redirect');
+        // Esperar un momento para asegurar que la sesión se actualice
+        setTimeout(() => {
+          // Cerrar el modal solo después de un inicio de sesión exitoso
+          toggleLoginModal();
+          // Usar una redirección del lado del cliente para asegurar que la sesión esté disponible
+          router.push('/auth-redirect');
+        }, 500);
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
+      setLoginError('Error inesperado. Intenta de nuevo');
+      setIsSubmitting(false);
     }
   };
 
   // Función para manejar el cierre de sesión
   const handleSignOut = async () => {
     setUserMenuOpen(false);
-    await signOut({ redirect: false });
-    router.push('/');
+    
+    // Limpiar contadores y estados locales inmediatamente
+    setUnreadMessages(0);
+    setUnreadNotifications(0);
+    
+    try {
+      await signOut({ redirect: false });
+      
+      // Redirigir a la página principal
+      console.log('Sesión cerrada, redirigiendo a la página principal');
+      router.push('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+  
+ // Añadir función para forzar la actualización de la sesión cuando sea necesario
+  const refreshSession = async () => {
+    try {
+      // Usar el método update para forzar la actualización de la sesión
+      const { update } = useSession();
+      await update();
+      console.log('Sesión actualizada forzosamente');
+    } catch (error) {
+      console.error('Error al actualizar la sesión:', error);
+    }
   };
 
   // Determinar el tipo de usuario y el texto a mostrar
@@ -715,7 +807,7 @@ const Navbar = () => {
 
             {/* Formulario de inicio de sesión */}
             <div className="mb-6">
-              <form>
+              <form onSubmit={handleSignIn}>
                 <div className="mb-4">
                   <label htmlFor="email" className="block text-sm font-medium text-brand-neutral-700 mb-1">
                     Email
@@ -725,6 +817,9 @@ const Navbar = () => {
                     id="email"
                     className="w-full px-3 py-2 border border-brand-neutral-300 rounded-md"
                     placeholder="tu@email.com"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="mb-4">
@@ -736,19 +831,37 @@ const Navbar = () => {
                     id="password"
                     className="w-full px-3 py-2 border border-brand-neutral-300 rounded-md"
                     placeholder="Tu contraseña"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    disabled={isSubmitting}
                   />
                 </div>
+
+                {loginError && (
+                  <div className="mb-4 p-2 bg-red-50 text-red-600 text-sm rounded border border-red-200">
+                    {loginError}
+                  </div>
+                )}
               </form>
             </div>
 
             {/* Opciones de autenticación */}
             <div className="space-y-4">
-              <button
-                onClick={handleSignIn}
-                className="w-full py-2 px-4 bg-brand-mauve-600 text-white rounded-md hover:bg-brand-mauve-700 focus:outline-none focus:ring-2 focus:ring-brand-mauve-500 focus:ring-offset-2"
-              >
-                Iniciar sesión
-              </button>
+            <button
+              onClick={handleSignIn}
+              className="w-full py-2 px-4 bg-brand-mauve-600 text-white rounded-md hover:bg-brand-mauve-700 focus:outline-none focus:ring-2 focus:ring-brand-mauve-500 focus:ring-offset-2 disabled:opacity-70"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Iniciando sesión...
+                </span>
+              ) : 'Iniciar sesión'}
+            </button>
               
               <button
                 onClick={() => {

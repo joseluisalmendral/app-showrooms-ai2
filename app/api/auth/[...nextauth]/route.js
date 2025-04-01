@@ -146,17 +146,26 @@ const handler = NextAuth({
       if (user) {
         console.log("JWT callback - user data:", user); // Log para depuración
         token.id = user.id;
-        token.tipo_usuario = user.tipo_usuario || 'marca'; // Establecer un valor predeterminado
+        
+        // Asegurar que el tipo de usuario sea válido y mantenga consistencia
+        // Preferencia: usar el tipo explícito que viene de la autenticación, fallback al rol en userDetails
+        token.tipo_usuario = user.tipo_usuario || 
+                             (user.userDetails?.role === 'marca' || user.userDetails?.role === 'showroom' 
+                              ? user.userDetails.role : 'marca');
         
         // Obtener detalles adicionales según el tipo de usuario
-        const userDetails = await getUserDetails(user.id, user.tipo_usuario);
+        const userDetails = await getUserDetails(user.id, token.tipo_usuario);
         token.userDetails = userDetails;
+        
+        // Registrar el tipo de usuario establecido para depuración
+        console.log("JWT callback - tipo_usuario establecido:", token.tipo_usuario);
       }
       
       // Si hay una actualización de sesión, actualizar el token
       if (trigger === "update" && session) {
         if (session.tipo_usuario) token.tipo_usuario = session.tipo_usuario;
         if (session.userDetails) token.userDetails = session.userDetails;
+        console.log("JWT callback - token actualizado con:", { tipo_usuario: token.tipo_usuario });
       }
       
       return token;
@@ -171,37 +180,75 @@ const handler = NextAuth({
         session.user.id = token.id;
         session.user.tipo_usuario = token.tipo_usuario;
         session.user.userDetails = token.userDetails;
+        
+        // Asegurar que la sesión siempre tenga un tipo_usuario válido
+        if (!session.user.tipo_usuario) {
+          console.warn("Sesión sin tipo_usuario, estableciendo valor por defecto: marca");
+          session.user.tipo_usuario = 'marca';
+        }
       }
       
-      console.log("Session callback - session data:", session); // Log para depuración
+      console.log("Session callback - session data final:", { 
+        id: session?.user?.id,
+        email: session?.user?.email,
+        tipo_usuario: session?.user?.tipo_usuario,
+        userDetails: session?.user?.userDetails ? 'available' : 'not available'
+      });
+      
       return session;
     },
     
+    // También mejorar el callback de redirect para un mejor manejo de las redirecciones
     async redirect({ url, baseUrl }) {
-      // Lógica mejorada de redirección
-      console.log("Redirect callback - url:", url, "baseUrl:", baseUrl); // Log para depuración
+      console.log("Redirect callback - url:", url, "baseUrl:", baseUrl);
       
-      // Si la URL ya está completa (con dominio)
+      // Si es una URL completa, usar directamente
       if (url.startsWith('http') || url.startsWith('https')) {
         return url;
       }
       
-      // Redirección especial para inicios de sesión exitosos
-      if (url.includes('/api/auth/signin') || url === baseUrl) {
-        // Esta URL se genera automáticamente por NextAuth después del login exitoso
-        // Redirigir según el tipo de usuario almacenado en la sesión
-        // Como no tenemos acceso a token/session aquí, llevamos al usuario a una página
-        // intermedia que manejará la redirección específica
-        return `${baseUrl}/auth-redirect`;
+      // Redirecciones de autenticación (sign-in, error, etc.)
+      if (url.includes('/api/auth/signin') || url === baseUrl || url.includes('/api/auth/callback')) {
+        // Usar página intermedia de redirección con querystring para debug
+        return `${baseUrl}/auth-redirect?source=signin&timestamp=${Date.now()}`;
       }
       
-      // Para otras rutas internas, mantener el comportamiento estándar
+      // Redirecciones de error de autenticación
+      if (url.includes('/api/auth/error')) {
+        return `${baseUrl}/iniciar-sesion?error=auth_error&timestamp=${Date.now()}`;
+      }
+      
+      // Para callbackUrls explícitos, respetarlos
+      const callbackUrl = new URL(url, baseUrl).searchParams.get('callbackUrl');
+      if (callbackUrl) {
+        // Si hay un callbackUrl explícito, usarlo
+        try {
+          const decodedCallbackUrl = decodeURIComponent(callbackUrl);
+          if (decodedCallbackUrl.startsWith('/')) {
+            // Para rutas internas, añadir el baseUrl
+            return `${baseUrl}${decodedCallbackUrl}`;
+          }
+          // Para URLs externas, verificar que sean seguras antes de redirigir
+          if (decodedCallbackUrl.startsWith('http')) {
+            const callbackDomain = new URL(decodedCallbackUrl).hostname;
+            const baseDomain = new URL(baseUrl).hostname;
+            // Solo permitir redirecciones al mismo dominio
+            if (callbackDomain === baseDomain) {
+              return decodedCallbackUrl;
+            }
+          }
+        } catch (e) {
+          console.error("Error procesando callbackUrl:", e);
+        }
+      }
+      
+      // Para URLs internas, mantener el comportamiento estándar
       if (url.startsWith('/')) {
         return `${baseUrl}${url}`;
       }
       
-      // Por defecto, volver a la URL base
-      return baseUrl;
+      // Por defecto, redirigir a /auth-redirect
+      return `${baseUrl}/auth-redirect`;
     }
   },
   
